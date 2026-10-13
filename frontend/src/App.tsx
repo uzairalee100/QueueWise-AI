@@ -5,6 +5,7 @@ import { HomePage } from './pages/HomePage'
 import { KioskPage } from './pages/KioskPage'
 import { TrackTokenPage } from './pages/TrackTokenPage'
 import { StaffDashboardPage } from './pages/StaffDashboardPage'
+import { SimulationLabPage } from './pages/SimulationLabPage'
 
 function App() {
   return (
@@ -19,6 +20,8 @@ function App() {
           <Route path="/token/:publicId" element={<TrackTokenPage />} />
           <Route path="/staff" element={<StaffDashboardPage />} />
           <Route path="/dashboard" element={<StaffDashboardPage />} />
+          <Route path="/simulation" element={<SimulationLabPage />} />
+          <Route path="/sim" element={<SimulationLabPage />} />
         </Route>
       </Routes>
     </LanguageProvider>

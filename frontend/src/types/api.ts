@@ -215,3 +215,141 @@ export interface ApiError {
   detail: string
   status_code?: number
 }
+
+/** Simulation Preset Scenario */
+export interface ScenarioInfo {
+  key: string
+  code: string
+  title: string
+  title_ur: string
+  category: string
+  badge_color: string
+  description: string
+  description_ur: string
+  duration_seconds: number
+  arrival_rate_per_minute: number
+  active_counters_count: number
+  priority_ratio: number
+  no_show_rate: number
+  service_duration_multiplier: number
+  target_sla_seconds: number
+  expected_outcome: string
+}
+
+/** Estimate vs Actual Comparison Sample */
+export interface EstimateVsActualPoint {
+  token_number: string
+  service_code: string
+  priority: number
+  estimated_wait_seconds: number
+  actual_wait_seconds: number
+  error_seconds: number
+  accuracy_pct: number
+}
+
+/** Estimate Accuracy Analysis */
+export interface EstimateVsActualAnalysis {
+  mean_absolute_error_seconds: number
+  overall_accuracy_pct: number
+  sample_points: EstimateVsActualPoint[]
+}
+
+/** Simulation KPI Metrics */
+export interface KPIMetrics {
+  avg_wait_seconds: number
+  median_wait_seconds: number
+  p95_wait_seconds: number
+  max_wait_seconds: number
+  avg_service_seconds: number
+  avg_priority_wait_seconds: number
+  avg_standard_wait_seconds: number
+  counter_utilization_pct: number
+  sla_breach_count: number
+  sla_breach_pct: number
+  throughput_per_hour: number
+}
+
+/** Counter Performance in Simulation */
+export interface CounterPerformance {
+  counter_name: string
+  supported_services: string[]
+  tokens_served: number
+  busy_time_seconds: number
+  utilization_pct: number
+}
+
+/** Service Performance in Simulation */
+export interface ServicePerformance {
+  name: string
+  total_issued: number
+  completed: number
+  skipped: number
+  unserved: number
+  avg_wait_seconds: number
+  max_wait_seconds: number
+}
+
+/** Simulation Run Payload */
+export interface SimulationRunCreatePayload {
+  name?: string
+  scenario_key?: string
+  random_seed?: number
+  duration_seconds?: number
+  arrival_rate_per_minute?: number
+  active_counters_count?: number
+  priority_ratio?: number
+  no_show_rate?: number
+  service_duration_multiplier?: number
+  target_sla_seconds?: number
+  custom_counter_assignments?: Record<string, string[]>
+}
+
+/** Simulation Run Full Response */
+export interface SimulationRunResponse {
+  id?: string | null
+  name: string
+  scenario_key: string
+  scenario_title: string
+  scenario_title_ur: string
+  random_seed: number
+  duration_seconds: number
+  total_tokens_issued: number
+  completed_tokens: number
+  skipped_tokens: number
+  unserved_waiting_tokens: number
+  kpi_metrics: KPIMetrics
+  estimate_vs_actual: EstimateVsActualAnalysis
+  counters: CounterPerformance[]
+  service_breakdown: Record<string, ServicePerformance>
+  parameters: Record<string, unknown>
+  created_at?: string | null
+}
+
+/** Service Optimization Result */
+export interface ServiceOptimizationResult {
+  service_code: string
+  service_name: string
+  current_counters: number
+  recommended_counters: number
+  offered_load_erlangs: number
+  current_utilization_pct: number
+  recommended_utilization_pct: number
+  current_wait_seconds: number
+  recommended_wait_seconds: number
+  wait_reduction_seconds: number
+}
+
+/** Counter Optimizer Response */
+export interface OptimizerResponse {
+  total_available_counters: number
+  target_sla_seconds: number
+  current_avg_wait_seconds: number
+  recommended_avg_wait_seconds: number
+  wait_reduction_pct: number
+  current_sla_compliance_pct: number
+  recommended_sla_compliance_pct: number
+  services: ServiceOptimizationResult[]
+  actionable_recommendations: string[]
+  actionable_recommendations_ur: string[]
+}
+

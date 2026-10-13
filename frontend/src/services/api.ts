@@ -13,6 +13,10 @@ import type {
   QueueSummaryResponse,
   WaitEstimateDetail,
   NotificationResponse,
+  ScenarioInfo,
+  SimulationRunCreatePayload,
+  SimulationRunResponse,
+  OptimizerResponse,
 } from '../types/api'
 
 const API_BASE = '/api/v1'
@@ -180,4 +184,43 @@ export async function getProspectiveWaitEstimate(
 /** Notifications for a token */
 export async function getNotifications(tokenPublicId: string): Promise<NotificationResponse[]> {
   return apiGet<NotificationResponse[]>(`/notifications/${encodeURIComponent(tokenPublicId)}`)
+}
+
+/** --- Simulation Lab & Optimizer APIs --- */
+
+export async function getScenarios(): Promise<ScenarioInfo[]> {
+  return apiGet<ScenarioInfo[]>('/simulation/scenarios')
+}
+
+export async function getScenario(scenarioKey: string): Promise<ScenarioInfo> {
+  return apiGet<ScenarioInfo>(`/simulation/scenarios/${encodeURIComponent(scenarioKey)}`)
+}
+
+export async function runSimulation(
+  payload: SimulationRunCreatePayload,
+  persist: boolean = true,
+): Promise<SimulationRunResponse> {
+  return apiPost<SimulationRunResponse>(`/simulation/runs?persist=${persist}`, payload)
+}
+
+export async function getSimulationRuns(limit: number = 20): Promise<SimulationRunResponse[]> {
+  return apiGet<SimulationRunResponse[]>(`/simulation/runs?limit=${limit}`)
+}
+
+export async function getSimulationRun(runId: string): Promise<SimulationRunResponse> {
+  return apiGet<SimulationRunResponse>(`/simulation/runs/${encodeURIComponent(runId)}`)
+}
+
+export async function optimizeCounters(payload: {
+  total_counters: number
+  target_sla_seconds?: number
+  services?: Array<{
+    code: string
+    name: string
+    arrival_rate_per_min: number
+    avg_duration_seconds: number
+    current_counters: number
+  }>
+}): Promise<OptimizerResponse> {
+  return apiPost<OptimizerResponse>('/simulation/optimizer/recommend', payload)
 }

@@ -156,14 +156,15 @@ See [`.env.example`](.env.example) for all configuration options. Key settings:
 
 - [x] **M1: Foundation** — Project structure, health endpoint, frontend shell
 - [x] **M2: Data & Queue Engine** — Models, migrations, token CRUD, state machine
-- [ ] **M3: Wait Estimator & Counters** — Dynamic estimates, counter management
-- [ ] **M4: Citizen HCI** — Mobile-first pages, QR codes, multilingual UI
-- [ ] **M5: Staff Dashboard & Real-Time** — WebSockets, counter dashboard
-- [ ] **M6: Notifications & Analytics** — Alerts, metrics, charts
-- [ ] **M7: Simulation & Optimizer** — Demand scenarios, counter allocation
-- [ ] **M8: AI Agent** — LangGraph, grounded recommendations
-- [ ] **M9: MCP & Voice** — Tool server, voice assistant
-- [ ] **M10: Security, Demo & Delivery** — Auth, demo seed, polishing
+- [x] **M3: Wait Estimator & Counters** — Dynamic estimates, counter management
+- [x] **M4: Real-Time Updates & Notifications** — WebSockets live push, in-app alerts
+- [x] **M5: Citizen Experience** — Mobile-first kiosk, live queue tracking, Web Audio alerts
+- [x] **M6: Staff Operations Dashboard** — Counter desk, call/serve/complete/skip/recall lifecycle
+- [x] **M7: Simulation Lab & Optimizer** — Scenarios A–F, estimate vs actual fidelity, M/M/c optimizer
+- [ ] **M8: Operational Analytics** — Aggregated historical metrics, charts, service times
+- [ ] **M9: AI Operations Agent** — LangGraph, evidence-based recommendations
+- [ ] **M10: MCP & Voice** — MCP tool server, bilingual voice assistant
+- [ ] **M11: Security, Demo & Delivery** — Auth review, complete test suite, demo seed
 
 ## 📝 License
 

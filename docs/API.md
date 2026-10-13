@@ -352,11 +352,45 @@ Connects to the real-time event pipeline. Clients can subscribe to system-wide s
 
 ---
 
-## Upcoming Endpoints
+## Simulation Lab & Counter Optimizer (Milestone 7)
 
-### Milestone 7 (Simulation Lab)
-- `POST /api/v1/simulation/runs`
-- `POST /api/v1/simulation/runs/{id}/start`
+### List Preset Challenge Scenarios
+```http
+GET /api/v1/simulation/scenarios
+```
+Returns all 6 challenge preset scenarios (A through F):
+- **Scenario A**: Baseline Operations
+- **Scenario B**: Morning Demand Surge
+- **Scenario C**: Staff Shortage & Counter Outage
+- **Scenario D**: Complex Documentation Cases
+- **Scenario E**: High Citizen No-Show Rate
+- **Scenario F**: Priority & Vulnerable Influx
+
+### Execute Simulation Run
+```http
+POST /api/v1/simulation/runs?persist=true
+```
+Executes a deterministic discrete-event queue simulation using pseudo-random seed, computing wait times, throughput, SLA breaches, and estimate-vs-actual fidelity.
+
+### List Past Simulation Runs
+```http
+GET /api/v1/simulation/runs?limit=20
+```
+
+### Get Single Simulation Run
+```http
+GET /api/v1/simulation/runs/{run_id}
+```
+
+### Counter Allocation Optimizer
+```http
+POST /api/v1/simulation/optimizer/recommend
+```
+Calculates deterministic counter allocation recommendations using M/M/c queue theory to eliminate bottlenecks, minimize average wait times, and provide actionable operational advice.
+
+---
+
+## Upcoming Endpoints
 
 ### Milestone 8 (Operational Analytics)
 - `GET /api/v1/analytics/summary`

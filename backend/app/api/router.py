@@ -11,6 +11,8 @@ from app.api.v1.queues import router as queues_router
 from app.api.v1.notifications import router as notifications_router
 from app.api.v1.websocket import router as websocket_router
 
+from app.api.v1.simulation import router as simulation_router
+
 api_router = APIRouter()
 
 
@@ -30,9 +32,8 @@ api_router.include_router(counters_router, prefix="/counters", tags=["Counters"]
 api_router.include_router(queues_router, prefix="/queues", tags=["Queues"])
 api_router.include_router(notifications_router, prefix="/notifications", tags=["Notifications"])
 api_router.include_router(websocket_router, prefix="/ws", tags=["Real-Time"])
+api_router.include_router(simulation_router, prefix="/simulation", tags=["Simulation"])
 
-# Future routers will be added here in upcoming milestones:
-# api_router.include_router(queues_router, prefix="/queues", tags=["Queues"])
+# Future routers:
 # api_router.include_router(analytics_router, prefix="/analytics", tags=["Analytics"])
-# api_router.include_router(simulation_router, prefix="/simulation", tags=["Simulation"])
 # api_router.include_router(agent_router, prefix="/agent", tags=["AI Agent"])
