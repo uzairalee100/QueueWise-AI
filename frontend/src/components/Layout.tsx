@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { Outlet, NavLink } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
+import { VoiceAssistantModal } from './VoiceAssistantModal'
 
 /**
  * Root layout with persistent navigation shell.
@@ -8,6 +10,7 @@ import { useLanguage } from '../context/LanguageContext'
  */
 export function Layout() {
   const { t, lang, toggleLang, isRTL } = useLanguage()
+  const [isVoiceModalOpen, setIsVoiceModalOpen] = useState(false)
 
   const navLinkClasses = ({ isActive }: { isActive: boolean }) =>
     `px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 ${
@@ -76,11 +79,25 @@ export function Layout() {
 
           {/* Right Controls: Language toggle + Status indicator */}
           <div className="flex items-center gap-2 sm:gap-3">
+            {/* Voice Assistant Trigger */}
+            <button
+              type="button"
+              onClick={() => setIsVoiceModalOpen(true)}
+              className="px-2.5 py-1.5 rounded-xl bg-accent-500/10 hover:bg-accent-500/20 border border-accent-500/30 text-xs font-bold text-accent-300 transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+              title="Open Multilingual Voice Assistant"
+              aria-label="Voice Assistant"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+              </svg>
+              <span className="hidden xs:inline">{lang === 'ur' ? 'صوتی معاون' : 'Voice'}</span>
+            </button>
+
             {/* Language Switcher */}
             <button
               type="button"
               onClick={toggleLang}
-              className="px-3 py-1.5 rounded-xl glass-light border border-white/10 hover:border-white/20 text-xs font-bold text-accent-300 transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+              className="px-3 py-1.5 rounded-xl glass-light border border-white/10 hover:border-white/20 text-xs font-bold text-surface-200 hover:text-white transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
               title="Toggle English / Urdu"
               aria-label="Toggle Language"
             >
@@ -149,6 +166,25 @@ export function Layout() {
           <span>{t.aiAdvisor}</span>
         </NavLink>
       </div>
+
+      {/* Floating Voice Assistant Trigger (Accessible across all screens) */}
+      <button
+        type="button"
+        onClick={() => setIsVoiceModalOpen(true)}
+        className="fixed bottom-20 sm:bottom-6 right-5 z-40 w-13 h-13 rounded-2xl bg-gradient-to-br from-accent-500 to-indigo-600 text-white shadow-xl shadow-accent-500/30 hover:scale-110 active:scale-95 transition-all flex items-center justify-center cursor-pointer border border-white/20 group"
+        title="Open Multilingual Voice Assistant"
+        aria-label="Voice Assistant Floating Action"
+      >
+        <svg className="w-6 h-6 group-hover:animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+        </svg>
+      </button>
+
+      {/* Voice Assistant Modal Component */}
+      <VoiceAssistantModal
+        isOpen={isVoiceModalOpen}
+        onClose={() => setIsVoiceModalOpen(false)}
+      />
 
       {/* Footer */}
       <footer className="hidden sm:block px-4 py-6 sm:px-6 text-center">

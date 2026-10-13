@@ -25,6 +25,9 @@ import type {
   OperationalAnalyticsResponse,
   AgentResponse,
   AgentCapabilitiesResponse,
+  VoiceQueryRequest,
+  VoiceQueryResponse,
+  VoiceAnnouncementsResponse,
 } from '../types/api'
 
 const API_BASE = '/api/v1'
@@ -325,5 +328,16 @@ export async function askAgent(params: {
 export async function getAgentCapabilities(): Promise<AgentCapabilitiesResponse> {
   return apiGet<AgentCapabilitiesResponse>('/agent/capabilities')
 }
+
+/** Process a spoken or typed natural language voice query */
+export async function processVoiceQuery(payload: VoiceQueryRequest): Promise<VoiceQueryResponse> {
+  return apiPost<VoiceQueryResponse>('/voice/query', payload)
+}
+
+/** Get standard multilingual announcement templates */
+export async function getVoiceAnnouncements(): Promise<VoiceAnnouncementsResponse> {
+  return apiGet<VoiceAnnouncementsResponse>('/voice/announcements')
+}
+
 
 

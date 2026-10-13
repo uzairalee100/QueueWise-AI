@@ -430,12 +430,114 @@ Unified endpoint aggregating all analytics subsystems for supervisor monitoring.
 
 ---
 
-## Upcoming Endpoints
+## AI Operations Agent Endpoints
 
-### Milestone 9 (AI Operations Agent)
-- `POST /api/v1/agent/ask`
+### Ask Agent
+`POST /api/v1/agent/ask`
 
-### Milestone 10 (MCP & Voice)
-- `POST /api/v1/mcp/tools`
-- `POST /api/v1/voice/query`
+Process natural language questions about queues, bottlenecks, counter allocation, and SLA compliance. Grounded in live database state.
+
+**Request:**
+```json
+{
+  "query": "What is the current queue status?",
+  "session_id": "default",
+  "language": "en"
+}
+```
+
+**Response:**
+```json
+{
+  "query": "What is the current queue status?",
+  "intent": "status",
+  "response": "Currently, 8 citizens are waiting across all services...",
+  "response_ur": "اس وقت تمام سروسز میں 8 شہری انتظار کر رہے ہیں...",
+  "data": { ... },
+  "grounding": {
+    "source": "QueueWise AI Operations Engine",
+    "timestamp": "2026-10-13T19:00:00Z",
+    "metrics_cited": ["total_waiting", "active_counters"]
+  },
+  "language": "en",
+  "agent_mode": "rule_based",
+  "llm_provider": "none"
+}
+```
+
+### Get Capabilities
+`GET /api/v1/agent/capabilities`
+
+Returns supported intents and sample bilingual prompts.
+
+---
+
+## Model Context Protocol (MCP) Endpoints
+
+### List MCP Tools (REST)
+`GET /api/v1/mcp/tools`
+
+Returns all registered tools conforming to the Model Context Protocol specification with input schemas.
+
+### Invoke MCP Tool (REST)
+`POST /api/v1/mcp/invoke`
+
+**Request:**
+```json
+{
+  "tool_name": "get_queue_status",
+  "arguments": { "session_id": "default" }
+}
+```
+
+### MCP JSON-RPC 2.0 Transport
+`POST /api/v1/mcp/rpc` (also available at `POST /api/v1/mcp`)
+
+Standard transport for MCP desktop clients (Claude Desktop, Antigravity, Cursor).
+Supports `initialize`, `ping`, `tools/list`, and `tools/call`.
+
+---
+
+## Voice & Multilingual Speech Endpoints
+
+### Process Spoken Query
+`POST /api/v1/voice/query`
+
+Processes spoken or typed citizen inquiries in English, Native Urdu (اردو), or Roman Urdu. Formulates clean spoken text optimized for browser Text-to-Speech (TTS).
+
+**Request:**
+```json
+{
+  "query": "mera token GEN-001 kab aayega?",
+  "session_id": "default"
+}
+```
+
+**Response:**
+```json
+{
+  "query": "mera token GEN-001 kab aayega?",
+  "detected_language": "roman_ur",
+  "intent": "wait_time",
+  "spoken_text": "Token GEN-001 ke agay 2 afraad hain. Intezar takreeban 5 minute hai.",
+  "spoken_text_en": "Token GEN-001 has 2 citizens ahead. Estimated wait is 5 minutes.",
+  "spoken_text_ur": "ٹوکن GEN-001 کے آگے 2 شہری ہیں۔ متوقع انتظار تقریباً 5 منٹ ہے۔",
+  "spoken_text_roman": "Token GEN-001 ke agay 2 afraad hain. Intezar takreeban 5 minute hai.",
+  "chime_hint": "info",
+  "token_resolved": true,
+  "metadata": {
+    "position": 3,
+    "people_ahead": 2,
+    "estimated_wait_minutes": 5,
+    "status": "WAITING"
+  },
+  "timestamp": "2026-10-13T19:00:00Z"
+}
+```
+
+### Standard Announcement Templates
+`GET /api/v1/voice/announcements`
+
+Returns bilingual public broadcast phrases for low-literacy kiosk and staff desk operations.
+
 

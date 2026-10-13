@@ -92,3 +92,10 @@ def sync_client(client):
     from starlette.testclient import TestClient
     with TestClient(app) as tc:
         yield tc
+
+
+@pytest.fixture
+async def async_client(client):
+    """Alias for client fixture for compatibility with AsyncClient naming."""
+    yield client
+

@@ -469,5 +469,33 @@ export interface AgentCapabilitiesResponse {
   }>
 }
 
+/** Voice Query Request */
+export interface VoiceQueryRequest {
+  query: string
+  token_identifier?: string
+  session_id?: string
+}
+
+/** Voice Query Response */
+export interface VoiceQueryResponse {
+  query: string
+  detected_language: string
+  intent: string
+  spoken_text: string
+  spoken_text_en: string
+  spoken_text_ur: string
+  spoken_text_roman: string
+  chime_hint: string
+  token_resolved: boolean
+  metadata: Record<string, unknown>
+  timestamp: string
+}
+
+/** Voice Announcements */
+export interface VoiceAnnouncementsResponse {
+  announcements: Record<string, Record<string, string>>
+}
+
+
 
 

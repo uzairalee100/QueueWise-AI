@@ -162,9 +162,44 @@ See [`.env.example`](.env.example) for all configuration options. Key settings:
 - [x] **M6: Staff Operations Dashboard** — Counter desk, call/serve/complete/skip/recall lifecycle
 - [x] **M7: Simulation Lab & Optimizer** — Scenarios A–F, estimate vs actual fidelity, M/M/c optimizer
 - [x] **M8: Operational Analytics** — Aggregated historical metrics, charts, service times
-- [ ] **M9: AI Operations Agent** — LangGraph, evidence-based recommendations
-- [ ] **M10: MCP & Voice** — MCP tool server, bilingual voice assistant
-- [ ] **M11: Security, Demo & Delivery** — Auth review, complete test suite, demo seed
+- [x] **M9: AI Operations Agent** — Multi-intent grounded advisor, live telemetry tools, zero hallucination
+- [x] **M10: MCP & Voice** — Model Context Protocol (MCP) tool server, bilingual voice assistant
+- [x] **M11: Final Delivery & Demo Readiness** — Full test suite (136/136 passing), idempotent demo seeder, production build, [Evaluator Demonstration Guide](docs/DEMO_GUIDE.md)
+
+## 🔌 Model Context Protocol (MCP) Server
+
+QueueWise AI implements the open **Model Context Protocol (MCP)** specification over JSON-RPC 2.0 and REST:
+
+- **JSON-RPC 2.0 Endpoint**: `POST /api/v1/mcp/rpc` (or `POST /api/v1/mcp`)
+  - Methods: `initialize`, `ping`, `tools/list`, `tools/call`
+- **REST Discovery**: `GET /api/v1/mcp/tools`
+- **REST Execution**: `POST /api/v1/mcp/invoke`
+- **Exposed Tools**:
+  - `get_queue_status` — Real-time queue volume, active desks, per-service breakdown
+  - `get_wait_estimate` — Dynamic wait-time estimates for services or tokens
+  - `get_analytics_summary` — SLA compliance %, completion rate, and throughput
+  - `get_optimization_recommendation` — Algorithmic counter reallocation advice
+  - `list_services` — Active service categories and durations
+  - `issue_citizen_token` — Safely issue digital queue tokens
+  - `call_next_token` — Operator action to call next waiting token
+
+## 🗣️ Low-Literacy Bilingual Voice Assistant
+
+- **Voice Query Endpoint**: `POST /api/v1/voice/query`
+- **Announcements Endpoint**: `GET /api/v1/voice/announcements`
+- **Supported Languages**: Native Urdu (`ur`), Roman Urdu (`roman_ur`), and English (`en`)
+- **Accessibility Features**:
+  - Web Speech API speech-to-text (microphone input)
+  - Text-to-speech audio readout with harmonic hospital call chimes
+  - Low-literacy spoken phrases with Roman Urdu pronunciation guidance
+
+## 🧪 Seeding Demo Dataset
+
+To populate a rich, realistic live queue state for demonstrations:
+```bash
+cd backend
+python -m scripts.demo_seed
+```
 
 ## 📝 License
 

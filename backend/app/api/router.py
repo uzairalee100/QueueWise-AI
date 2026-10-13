@@ -14,6 +14,8 @@ from app.api.v1.websocket import router as websocket_router
 from app.api.v1.simulation import router as simulation_router
 from app.api.v1.analytics import router as analytics_router
 from app.api.v1.agent import router as agent_router
+from app.api.v1.mcp import router as mcp_router
+from app.api.v1.voice import router as voice_router
 
 api_router = APIRouter()
 
@@ -37,3 +39,6 @@ api_router.include_router(websocket_router, prefix="/ws", tags=["Real-Time"])
 api_router.include_router(simulation_router, prefix="/simulation", tags=["Simulation"])
 api_router.include_router(analytics_router, prefix="/analytics", tags=["Analytics"])
 api_router.include_router(agent_router, prefix="/agent", tags=["AI Agent"])
+api_router.include_router(mcp_router, prefix="/mcp", tags=["Model Context Protocol (MCP)"])
+api_router.include_router(voice_router, prefix="/voice", tags=["Voice & Speech"])
+
