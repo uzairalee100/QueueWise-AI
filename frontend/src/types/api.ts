@@ -436,4 +436,38 @@ export interface OperationalAnalyticsResponse {
   recent_events: ServiceEventLogItem[]
 }
 
+/** Evidence Grounding Info */
+export interface AgentGroundingInfo {
+  source: string
+  timestamp: string
+  metrics_cited: string[]
+}
+
+/** AI Operations Agent Response */
+export interface AgentResponse {
+  query: string
+  intent: string
+  response: string
+  response_ur?: string | null
+  data: Record<string, unknown>
+  grounding: AgentGroundingInfo
+  language: string
+  agent_mode: string
+  llm_provider: string
+}
+
+/** AI Operations Agent Capabilities */
+export interface AgentCapabilitiesResponse {
+  agent_name: string
+  agent_mode: string
+  llm_provider: string
+  supported_intents: string[]
+  example_queries: Array<{
+    intent: string
+    query_en: string
+    query_ur: string
+  }>
+}
+
+
 

@@ -252,7 +252,7 @@ class QueueEngine:
             return (0, 0)
 
         # Count tokens WAITING in same service category and session with:
-        # higher priority OR same priority and earlier created_at
+        # higher priority OR same priority and earlier created_at (with display_number tiebreaker for same clock tick)
         stmt = select(func.count(Token.id)).where(
             and_(
                 Token.service_category_id == token.service_category_id,
@@ -262,7 +262,13 @@ class QueueEngine:
                     Token.priority > token.priority,
                     and_(
                         Token.priority == token.priority,
-                        Token.created_at < token.created_at,
+                        or_(
+                            Token.created_at < token.created_at,
+                            and_(
+                                Token.created_at == token.created_at,
+                                Token.display_number < token.display_number,
+                            ),
+                        ),
                     ),
                 ),
             )
@@ -292,7 +298,7 @@ class QueueEngine:
         stmt = (
             select(Token)
             .where(and_(*conditions))
-            .order_by(Token.priority.desc(), Token.created_at.asc())
+            .order_by(Token.priority.desc(), Token.created_at.asc(), Token.display_number.asc())
             .options(selectinload(Token.service_category))
         )
         result = await session.execute(stmt)

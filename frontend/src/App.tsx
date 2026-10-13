@@ -7,6 +7,7 @@ import { TrackTokenPage } from './pages/TrackTokenPage'
 import { StaffDashboardPage } from './pages/StaffDashboardPage'
 import { SimulationLabPage } from './pages/SimulationLabPage'
 import { AnalyticsPage } from './pages/AnalyticsPage'
+import { AgentPage } from './pages/AgentPage'
 
 function App() {
   return (
@@ -24,6 +25,9 @@ function App() {
           <Route path="/simulation" element={<SimulationLabPage />} />
           <Route path="/sim" element={<SimulationLabPage />} />
           <Route path="/analytics" element={<AnalyticsPage />} />
+          <Route path="/agent" element={<AgentPage />} />
+          <Route path="/ai" element={<AgentPage />} />
+          <Route path="/advisor" element={<AgentPage />} />
         </Route>
       </Routes>
     </LanguageProvider>

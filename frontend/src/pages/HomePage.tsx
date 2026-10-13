@@ -153,6 +153,103 @@ export function HomePage() {
         </div>
       </section>
 
+      {/* Operations & Supervisor Intelligence Modules */}
+      <section className="px-4 sm:px-6 pb-14">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-xl sm:text-2xl font-bold text-white">
+                Operations & Management Portal
+              </h2>
+              <p className="text-xs sm:text-sm text-surface-200/60 mt-0.5">
+                Live staff counters, discrete simulation lab, analytics ledger, and AI operational advisor
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Staff Counter Desk */}
+            <button
+              onClick={() => navigate('/staff')}
+              className="glass p-5 rounded-2xl border border-white/10 hover:border-primary-500/40 text-left transition-all group hover:bg-white/5 cursor-pointer shadow-lg hover:shadow-primary-500/10 active:scale-95 flex flex-col justify-between"
+            >
+              <div>
+                <div className="w-10 h-10 rounded-xl bg-primary-500/20 text-primary-300 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+                  🪑
+                </div>
+                <h3 className="font-bold text-white text-sm mb-1">{t.staffDesk}</h3>
+                <p className="text-xs text-surface-200/70 leading-relaxed">
+                  Call next tokens, manage serving desks, and handle no-shows in real time.
+                </p>
+              </div>
+              <span className="text-[11px] font-semibold text-primary-400 mt-4 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                Open Desk &rarr;
+              </span>
+            </button>
+
+            {/* Simulation Lab */}
+            <button
+              onClick={() => navigate('/simulation')}
+              className="glass p-5 rounded-2xl border border-white/10 hover:border-amber-500/40 text-left transition-all group hover:bg-white/5 cursor-pointer shadow-lg hover:shadow-amber-500/10 active:scale-95 flex flex-col justify-between"
+            >
+              <div>
+                <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+                  🧪
+                </div>
+                <h3 className="font-bold text-white text-sm mb-1">{t.simulationLab}</h3>
+                <p className="text-xs text-surface-200/70 leading-relaxed">
+                  Test scenarios A-F and optimize counter reallocation with M/M/c queue theory.
+                </p>
+              </div>
+              <span className="text-[11px] font-semibold text-amber-400 mt-4 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                Launch Lab &rarr;
+              </span>
+            </button>
+
+            {/* Operational Analytics */}
+            <button
+              onClick={() => navigate('/analytics')}
+              className="glass p-5 rounded-2xl border border-white/10 hover:border-emerald-500/40 text-left transition-all group hover:bg-white/5 cursor-pointer shadow-lg hover:shadow-emerald-500/10 active:scale-95 flex flex-col justify-between"
+            >
+              <div>
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+                  📈
+                </div>
+                <h3 className="font-bold text-white text-sm mb-1">{t.analytics}</h3>
+                <p className="text-xs text-surface-200/70 leading-relaxed">
+                  Real-time SLA compliance, rush hour hourly volume, and immutable audit trail.
+                </p>
+              </div>
+              <span className="text-[11px] font-semibold text-emerald-400 mt-4 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                View Reports &rarr;
+              </span>
+            </button>
+
+            {/* AI Operations Advisor */}
+            <button
+              onClick={() => navigate('/agent')}
+              className="glass p-5 rounded-2xl border border-accent-500/30 hover:border-accent-400 text-left transition-all group hover:bg-white/5 cursor-pointer shadow-lg hover:shadow-accent-500/20 active:scale-95 flex flex-col justify-between relative overflow-hidden"
+            >
+              <div className="absolute top-2 right-2 px-1.5 py-0.5 rounded text-[9px] font-bold bg-accent-500/20 text-accent-300 border border-accent-500/30">
+                Grounded AI
+              </div>
+              <div>
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-500 to-indigo-600 text-white flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform shadow-md shadow-accent-500/30">
+                  ⚡
+                </div>
+                <h3 className="font-bold text-white text-sm mb-1">{t.aiAdvisor}</h3>
+                <p className="text-xs text-surface-200/70 leading-relaxed">
+                  Ask natural language questions on live wait times, bottlenecks, and staffing.
+                </p>
+              </div>
+              <span className="text-[11px] font-semibold text-accent-400 mt-4 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                Consult Advisor &rarr;
+              </span>
+            </button>
+          </div>
+        </div>
+      </section>
+
       {/* Features preview */}
       <section className="px-4 sm:px-6 pb-16">
         <div className="max-w-5xl mx-auto">

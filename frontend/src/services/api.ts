@@ -23,6 +23,8 @@ import type {
   CounterAnalyticsItem,
   ServiceEventLogItem,
   OperationalAnalyticsResponse,
+  AgentResponse,
+  AgentCapabilitiesResponse,
 } from '../types/api'
 
 const API_BASE = '/api/v1'
@@ -305,4 +307,23 @@ export async function getOperationalDashboard(params?: {
   const qs = query.toString() ? `?${query.toString()}` : ''
   return apiGet<OperationalAnalyticsResponse>(`/analytics/dashboard${qs}`)
 }
+
+/** Ask the AI Operations Agent */
+export async function askAgent(params: {
+  query: string
+  language?: string
+  sessionId?: string
+}): Promise<AgentResponse> {
+  return apiPost<AgentResponse>('/agent/ask', {
+    query: params.query,
+    language: params.language || 'en',
+    session_id: params.sessionId || 'default',
+  })
+}
+
+/** Get AI Agent capabilities and sample queries */
+export async function getAgentCapabilities(): Promise<AgentCapabilitiesResponse> {
+  return apiGet<AgentCapabilitiesResponse>('/agent/capabilities')
+}
+
 
