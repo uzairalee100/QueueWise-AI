@@ -8,6 +8,7 @@ import type {
   ServiceCategory,
   TokenPublicStatus,
   TokenCreateRequest,
+  TokenResponse,
   Counter,
   QueueSummaryResponse,
   WaitEstimateDetail,
@@ -104,6 +105,21 @@ export async function getCounters(): Promise<Counter[]> {
   return apiGet<Counter[]>('/counters')
 }
 
+/** Get a single counter */
+export async function getCounter(counterId: string): Promise<Counter> {
+  return apiGet<Counter>(`/counters/${counterId}`)
+}
+
+/** Create a new counter */
+export async function createCounter(data: { name: string; supported_service_ids?: string[] }): Promise<Counter> {
+  return apiPost<Counter>('/counters', data)
+}
+
+/** Update counter supported services */
+export async function updateCounterServices(counterId: string, serviceIds: string[]): Promise<Counter> {
+  return apiPut<Counter>(`/counters/${counterId}/services`, { supported_service_ids: serviceIds })
+}
+
 /** Counter operator controls */
 export async function openCounter(counterId: string): Promise<Counter> {
   return apiPost<Counter>(`/counters/${counterId}/open`)
@@ -121,24 +137,29 @@ export async function closeCounter(counterId: string): Promise<Counter> {
   return apiPost<Counter>(`/counters/${counterId}/close`)
 }
 
-export async function callNextToken(counterId: string, sessionId: string = 'default') {
-  return apiPost(`/counters/${counterId}/call-next?session_id=${encodeURIComponent(sessionId)}`)
+export async function callNextToken(counterId: string, sessionId: string = 'default'): Promise<TokenResponse | null> {
+  return apiPost<TokenResponse | null>(`/counters/${counterId}/call-next?session_id=${encodeURIComponent(sessionId)}`)
 }
 
-export async function startServingToken(counterId: string) {
-  return apiPost(`/counters/${counterId}/serve`)
+export async function startServingToken(counterId: string): Promise<TokenResponse> {
+  return apiPost<TokenResponse>(`/counters/${counterId}/serve`)
 }
 
-export async function completeServingToken(counterId: string) {
-  return apiPost(`/counters/${counterId}/complete`)
+export async function completeServingToken(counterId: string): Promise<TokenResponse> {
+  return apiPost<TokenResponse>(`/counters/${counterId}/complete`)
 }
 
-export async function skipToken(counterId: string, reason: string = 'No-show') {
-  return apiPost(`/counters/${counterId}/skip?reason=${encodeURIComponent(reason)}`)
+export async function skipToken(counterId: string, reason: string = 'No-show'): Promise<TokenResponse> {
+  return apiPost<TokenResponse>(`/counters/${counterId}/skip?reason=${encodeURIComponent(reason)}`)
 }
 
-export async function recallToken(counterId: string, reason: string = 'Requeued') {
-  return apiPost(`/counters/${counterId}/recall?reason=${encodeURIComponent(reason)}`)
+export async function recallToken(counterId: string, reason: string = 'Requeued'): Promise<TokenResponse> {
+  return apiPost<TokenResponse>(`/counters/${counterId}/recall?reason=${encodeURIComponent(reason)}`)
+}
+
+/** List waiting tokens for a service */
+export async function getWaitingTokens(serviceId: string, sessionId: string = 'default'): Promise<TokenPublicStatus[]> {
+  return apiGet<TokenPublicStatus[]>(`/queues/${serviceId}/waiting?session_id=${encodeURIComponent(sessionId)}`)
 }
 
 /** Queue summary and wait estimates */

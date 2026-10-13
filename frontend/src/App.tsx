@@ -4,6 +4,7 @@ import { Layout } from './components/Layout'
 import { HomePage } from './pages/HomePage'
 import { KioskPage } from './pages/KioskPage'
 import { TrackTokenPage } from './pages/TrackTokenPage'
+import { StaffDashboardPage } from './pages/StaffDashboardPage'
 
 function App() {
   return (
@@ -16,6 +17,8 @@ function App() {
           <Route path="/track" element={<TrackTokenPage />} />
           <Route path="/track/:publicId" element={<TrackTokenPage />} />
           <Route path="/token/:publicId" element={<TrackTokenPage />} />
+          <Route path="/staff" element={<StaffDashboardPage />} />
+          <Route path="/dashboard" element={<StaffDashboardPage />} />
         </Route>
       </Routes>
     </LanguageProvider>

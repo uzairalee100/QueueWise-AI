@@ -74,6 +74,26 @@ export interface TokenCreateRequest {
   priority?: number
 }
 
+/** Full Staff Token Response */
+export interface TokenResponse {
+  id: string
+  public_id: string
+  display_number: string
+  service_category_id: string
+  session_id: string
+  status: TokenStatus
+  priority: number
+  idempotency_key?: string | null
+  contact_info?: string | null
+  called_counter_id?: string | null
+  created_at: string
+  called_at?: string | null
+  service_started_at?: string | null
+  completed_at?: string | null
+  cancelled_at?: string | null
+  service_category?: ServiceCategory | null
+}
+
 /** Counter representation */
 export interface Counter {
   id: string
@@ -82,9 +102,21 @@ export interface Counter {
   assigned_operator_id?: string | null
   current_token_id?: string | null
   current_token_display_number?: string | null
+  current_token?: TokenResponse | null
   status_changed_at: string
   created_at: string
   supported_services: ServiceCategory[]
+}
+
+/** Counter creation payload */
+export interface CounterCreatePayload {
+  name: string
+  supported_service_ids?: string[]
+}
+
+/** Counter service assignment payload */
+export interface CounterAssignServicesPayload {
+  supported_service_ids: string[]
 }
 
 /** Currently serving token details at a counter */
