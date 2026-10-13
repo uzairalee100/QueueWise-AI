@@ -5,21 +5,7 @@ Verifies that the application starts, the health endpoint responds,
 and the API router is mounted correctly.
 """
 import pytest
-from httpx import AsyncClient, ASGITransport
-from app.main import app
-
-
-@pytest.fixture
-def anyio_backend():
-    return "asyncio"
-
-
-@pytest.fixture
-async def client():
-    """Async test client for the FastAPI app."""
-    transport = ASGITransport(app=app)
-    async with AsyncClient(transport=transport, base_url="http://test") as ac:
-        yield ac
+from httpx import AsyncClient
 
 
 @pytest.mark.anyio

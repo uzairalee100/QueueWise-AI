@@ -10,8 +10,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
-from app.core.database import init_db
+from app.core.database import init_db, async_session_factory
 from app.core.logging import setup_logging, get_logger
+from app.core.seed import seed_initial_data
 from app.api.router import api_router
 
 logger = get_logger(__name__)
@@ -31,7 +32,9 @@ async def lifespan(app: FastAPI):
     # Initialize database tables (dev/demo only — production uses Alembic)
     if settings.app_env == "development":
         await init_db()
-        logger.info("database_initialized", mode="auto-create")
+        async with async_session_factory() as session:
+            await seed_initial_data(session)
+        logger.info("database_initialized", mode="auto-create-and-seed")
 
     yield
 

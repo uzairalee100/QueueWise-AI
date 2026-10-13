@@ -1,1 +1,22 @@
-"""QueueWise AI — Business services package. Services will be added in Milestone 2+."""
+"""
+QueueWise AI — Services Package
+"""
+from app.services.queue_engine import (
+    QueueEngine,
+    QueueEngineError,
+    TokenNotFoundError,
+    ServiceCategoryNotFoundError,
+    CounterNotFoundError,
+    CounterUnavailableError,
+    InvalidStateTransitionError,
+)
+
+__all__ = [
+    "QueueEngine",
+    "QueueEngineError",
+    "TokenNotFoundError",
+    "ServiceCategoryNotFoundError",
+    "CounterNotFoundError",
+    "CounterUnavailableError",
+    "InvalidStateTransitionError",
+]
