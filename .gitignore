@@ -1,0 +1,73 @@
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+*.whl
+.venv/
+venv/
+env/
+ENV/
+
+# ===== Node.js =====
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ===== Build outputs =====
+frontend/dist/
+frontend/build/
+backend/build/
+
+# ===== Environment & Secrets =====
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# ===== IDE =====
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ===== Testing & Coverage =====
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+.mypy_cache/
+
+# ===== Database =====
+*.db
+*.sqlite3
+
+# ===== Docker =====
+docker-compose.override.yml
+
+# ===== Logs =====
+*.log
+logs/
+
+# ===== Alembic =====
+alembic/versions/__pycache__/

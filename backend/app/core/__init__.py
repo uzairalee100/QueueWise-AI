@@ -1,0 +1,1 @@
+"""QueueWise AI — Core module."""
