@@ -285,10 +285,74 @@ Returns ordered list of waiting tokens with dynamic wait estimates.
 
 ---
 
-## Upcoming Endpoints
+### Notifications (Milestone 4)
 
-### Milestone 4 (WebSockets & Real-Time)
-- `WS /ws/live` - Real-time queue event push and notification triggers
+#### Get Notifications for Token
+```http
+GET /api/v1/notifications/{token_public_id}
+GET /api/v1/tokens/{token_public_id}/notifications
+```
+Fetches in-app notification history for a specific token (e.g. `CREATED`, `APPROACHING`, `CALLED`, `SKIPPED`, `COMPLETED`).
+
+**Response:**
+```json
+[
+  {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "token_id": "8905bfe1-95bc-4886-905e-f78fbb4cb55e",
+    "type": "CALLED",
+    "channel": "IN_APP",
+    "status": "SENT",
+    "title": "Your Turn! Token CALLED",
+    "message": "Token GEN-001 has been called to Counter 1. Please proceed immediately.",
+    "created_at": "2026-10-13T10:05:00Z",
+    "sent_at": "2026-10-13T10:05:00Z",
+    "retry_count": 0
+  }
+]
+```
+
+---
+
+## Real-Time WebSockets (Milestone 4)
+
+### Live Stream Endpoint
+```http
+WS /ws/live
+WS /api/v1/ws/live
+```
+
+Connects to the real-time event pipeline. Clients can subscribe to system-wide session events, private citizen token updates, and counter operator streams.
+
+#### Query Parameters:
+- `session_id` (optional, default `"default"`): Scope to a operational session or branch.
+- `token_public_id` (optional): Subscribe to private token notifications (e.g., approaching call alert).
+- `counter_id` (optional): Scope to a physical counter's call/serve lifecycle.
+
+#### Client Messages:
+- Ping Heartbeat:
+  ```json
+  { "event": "PING" }
+  ```
+- Re-subscribe / Scope:
+  ```json
+  { "action": "subscribe", "token_public_id": "...", "counter_id": "..." }
+  ```
+
+#### Server Broadcast Events:
+- `TOKEN_CREATED`: Emitted when any citizen creates a token.
+- `TOKEN_CALLED`: Emitted when an operator calls a token to a counter.
+- `TOKEN_SERVING`: Emitted when service starts.
+- `TOKEN_COMPLETED`: Emitted when service finishes.
+- `TOKEN_SKIPPED`: Emitted when a no-show token is skipped.
+- `TOKEN_RECALLED`: Emitted when a token is recalled into waiting queue.
+- `TOKEN_CANCELLED`: Emitted when a citizen cancels.
+- `COUNTER_STATUS_CHANGED`: Emitted when a counter opens, pauses, resumes, or closes.
+- `NOTIFICATION`: Targeted in-app notification dispatch for citizen tokens.
+
+---
+
+## Upcoming Endpoints
 
 ### Milestone 7 (Simulation Lab)
 - `POST /api/v1/simulation/runs`
@@ -300,3 +364,4 @@ Returns ordered list of waiting tokens with dynamic wait estimates.
 
 ### Milestone 10 (AI Operations Agent)
 - `POST /api/v1/agent/ask`
+

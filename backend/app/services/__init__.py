@@ -12,10 +12,12 @@ from app.services.queue_engine import (
 )
 
 from app.services.wait_estimator import WaitEstimator
+from app.services.notification_service import NotificationService
 
 __all__ = [
     "QueueEngine",
     "WaitEstimator",
+    "NotificationService",
     "QueueEngineError",
     "TokenNotFoundError",
     "ServiceCategoryNotFoundError",

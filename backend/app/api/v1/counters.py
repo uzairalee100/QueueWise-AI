@@ -12,6 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.core.database import get_db
+from app.core.websocket import ws_manager
 from app.models.counter import Counter
 from app.models.service_category import ServiceCategory
 from app.models.enums import CounterStatus, ServiceEventType
@@ -32,6 +33,7 @@ from app.services.queue_engine import (
     TokenNotFoundError,
     InvalidStateTransitionError,
 )
+from app.services.notification_service import NotificationService
 
 router = APIRouter()
 
@@ -141,6 +143,18 @@ async def update_counter_status(
 
     await db.commit()
     await db.refresh(counter)
+
+    # Multicast real-time counter status change
+    await ws_manager.broadcast(
+        event="COUNTER_STATUS_CHANGED",
+        data={
+            "counter_id": str(counter.id),
+            "counter_name": counter.name,
+            "old_status": old_status.value,
+            "status": counter.status.value,
+        },
+    )
+
     return counter
 
 
@@ -260,11 +274,43 @@ async def call_next_token(
     Returns the called token or null if no waiting tokens exist.
     """
     try:
+        counter = await db.get(Counter, counter_id)
+        if not counter:
+            raise CounterNotFoundError(f"Counter '{counter_id}' not found.")
+
         token = await QueueEngine.call_next_token(
             session=db,
             counter_id=counter_id,
             session_id=session_id,
         )
+
+        if token:
+            # Dispatch call notification to citizen
+            await NotificationService.notify_token_called(
+                session=db, token=token, counter_name=counter.name
+            )
+
+            # Check and trigger approaching notifications for upcoming tokens in line
+            await NotificationService.check_and_notify_approaching_tokens(
+                session=db,
+                service_category_id=token.service_category_id,
+                session_id=session_id,
+            )
+
+            # Multicast real-time TOKEN_CALLED event
+            await ws_manager.broadcast(
+                event="TOKEN_CALLED",
+                data={
+                    "token_id": str(token.id),
+                    "public_id": token.public_id,
+                    "display_number": token.display_number,
+                    "counter_id": str(counter.id),
+                    "counter_name": counter.name,
+                    "status": "CALLED",
+                },
+                session_id=session_id,
+            )
+
         return token
     except (CounterNotFoundError, TokenNotFoundError) as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
@@ -288,6 +334,21 @@ async def start_service(
 
     try:
         token = await QueueEngine.start_serving(db, token_id=counter.current_token_id)
+
+        # Multicast real-time TOKEN_SERVING event
+        await ws_manager.broadcast(
+            event="TOKEN_SERVING",
+            data={
+                "token_id": str(token.id),
+                "public_id": token.public_id,
+                "display_number": token.display_number,
+                "counter_id": str(counter.id),
+                "counter_name": counter.name,
+                "status": "SERVING",
+            },
+            session_id=token.session_id,
+        )
+
         return token
     except (TokenNotFoundError, CounterNotFoundError) as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
@@ -311,6 +372,31 @@ async def complete_service(
 
     try:
         token = await QueueEngine.complete_token(db, token_id=counter.current_token_id)
+
+        # Dispatch completion notification
+        await NotificationService.notify_token_completed(session=db, token=token)
+
+        # Check and trigger approaching notifications for remaining waiting queue
+        await NotificationService.check_and_notify_approaching_tokens(
+            session=db,
+            service_category_id=token.service_category_id,
+            session_id=token.session_id,
+        )
+
+        # Multicast real-time TOKEN_COMPLETED event
+        await ws_manager.broadcast(
+            event="TOKEN_COMPLETED",
+            data={
+                "token_id": str(token.id),
+                "public_id": token.public_id,
+                "display_number": token.display_number,
+                "counter_id": str(counter.id),
+                "counter_name": counter.name,
+                "status": "COMPLETED",
+            },
+            session_id=token.session_id,
+        )
+
         return token
     except (TokenNotFoundError, CounterNotFoundError) as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
@@ -335,6 +421,32 @@ async def skip_service(
 
     try:
         token = await QueueEngine.skip_token(db, token_id=counter.current_token_id, reason=reason)
+
+        # Dispatch skip notification
+        await NotificationService.notify_token_skipped(session=db, token=token, reason=reason)
+
+        # Check approaching notifications for remaining queue
+        await NotificationService.check_and_notify_approaching_tokens(
+            session=db,
+            service_category_id=token.service_category_id,
+            session_id=token.session_id,
+        )
+
+        # Multicast real-time TOKEN_SKIPPED event
+        await ws_manager.broadcast(
+            event="TOKEN_SKIPPED",
+            data={
+                "token_id": str(token.id),
+                "public_id": token.public_id,
+                "display_number": token.display_number,
+                "counter_id": str(counter.id),
+                "counter_name": counter.name,
+                "status": "SKIPPED",
+                "reason": reason,
+            },
+            session_id=token.session_id,
+        )
+
         return token
     except (TokenNotFoundError, CounterNotFoundError) as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
@@ -359,6 +471,22 @@ async def recall_service(
 
     try:
         token = await QueueEngine.recall_token(db, token_id=counter.current_token_id, reason=reason)
+
+        # Multicast real-time TOKEN_RECALLED event
+        await ws_manager.broadcast(
+            event="TOKEN_RECALLED",
+            data={
+                "token_id": str(token.id),
+                "public_id": token.public_id,
+                "display_number": token.display_number,
+                "counter_id": str(counter.id),
+                "counter_name": counter.name,
+                "status": "WAITING",
+                "reason": reason,
+            },
+            session_id=token.session_id,
+        )
+
         return token
     except (TokenNotFoundError, CounterNotFoundError) as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))

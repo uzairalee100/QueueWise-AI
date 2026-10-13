@@ -29,6 +29,10 @@ from app.schemas.queue import (
     QueueSummaryResponse,
     WaitEstimateDetail,
 )
+from app.schemas.notification import (
+    NotificationResponse,
+    NotificationCreate,
+)
 
 __all__ = [
     "UserBase",
@@ -51,4 +55,6 @@ __all__ = [
     "QueueSummaryItem",
     "QueueSummaryResponse",
     "WaitEstimateDetail",
+    "NotificationResponse",
+    "NotificationCreate",
 ]

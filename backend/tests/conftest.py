@@ -84,3 +84,11 @@ async def client(test_engine):
         yield ac
 
     app.dependency_overrides.clear()
+
+
+@pytest.fixture
+def sync_client(client):
+    """Synchronous TestClient for WebSocket testing, inheriting the isolated in-memory test database."""
+    from starlette.testclient import TestClient
+    with TestClient(app) as tc:
+        yield tc

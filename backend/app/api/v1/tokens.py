@@ -3,11 +3,14 @@ QueueWise AI — Token API Endpoints
 
 Citizen-facing token issuance, tracking, and cancellation.
 """
+from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
+from app.core.websocket import ws_manager
 from app.schemas.token import TokenCreate, TokenPublicStatus, TokenResponse
+from app.schemas.notification import NotificationResponse
 from app.services.queue_engine import (
     QueueEngine,
     TokenNotFoundError,
@@ -15,6 +18,7 @@ from app.services.queue_engine import (
     InvalidStateTransitionError,
 )
 from app.services.wait_estimator import WaitEstimator
+from app.services.notification_service import NotificationService
 from app.models.enums import TokenStatus
 
 router = APIRouter()
@@ -41,6 +45,29 @@ async def create_token(
         )
 
         estimate = await WaitEstimator.estimate_token_wait(db, token)
+
+        # Dispatch creation notification
+        await NotificationService.notify_token_created(
+            session=db,
+            token=token,
+            position_ahead=estimate["position_ahead"],
+            estimated_wait_seconds=estimate["estimated_wait_seconds"],
+        )
+
+        # Multicast real-time TOKEN_CREATED event
+        await ws_manager.broadcast(
+            event="TOKEN_CREATED",
+            data={
+                "token_id": str(token.id),
+                "public_id": token.public_id,
+                "display_number": token.display_number,
+                "service_code": token.service_category.code if token.service_category else "GEN",
+                "service_name": token.service_category.name if token.service_category else "General",
+                "position_ahead": estimate["position_ahead"],
+                "estimated_wait_seconds": estimate["estimated_wait_seconds"],
+            },
+            session_id=token.session_id,
+        )
 
         return TokenPublicStatus(
             public_id=token.public_id,
@@ -112,6 +139,17 @@ async def cancel_token(
     """
     try:
         token = await QueueEngine.cancel_token(db, public_id=public_id, reason=reason)
+        # Multicast cancellation event
+        await ws_manager.broadcast(
+            event="TOKEN_CANCELLED",
+            data={
+                "public_id": token.public_id,
+                "display_number": token.display_number,
+                "status": "CANCELLED",
+            },
+            session_id=token.session_id,
+        )
+
         return TokenPublicStatus(
             public_id=token.public_id,
             display_number=token.display_number,
@@ -120,6 +158,8 @@ async def cancel_token(
             service_code=token.service_category.code if token.service_category else "GEN",
             position_ahead=0,
             estimated_wait_seconds=0,
+            active_counters=0,
+            is_stalled=False,
             called_counter_name=None,
             created_at=token.created_at,
             called_at=token.called_at,
@@ -132,3 +172,14 @@ async def cancel_token(
         )
     except InvalidStateTransitionError as e:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(e))
+
+
+@router.get("/{public_id}/notifications", response_model=List[NotificationResponse])
+async def get_token_notifications(
+    public_id: str,
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Retrieve all in-app notifications dispatched for this token.
+    """
+    return await NotificationService.get_token_notifications(db, token_public_id=public_id)

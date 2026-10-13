@@ -143,6 +143,41 @@ export interface WaitEstimateDetail {
   status_message: string
 }
 
+/** Notification Types */
+export type NotificationType =
+  | 'CREATED'
+  | 'APPROACHING'
+  | 'CALLED'
+  | 'SKIPPED'
+  | 'COMPLETED'
+
+export type NotificationChannel = 'IN_APP' | 'BROWSER' | 'SMS'
+export type NotificationStatus = 'PENDING' | 'SENT' | 'FAILED'
+
+export interface NotificationResponse {
+  id: string
+  token_id: string
+  type: NotificationType
+  channel: NotificationChannel
+  status: NotificationStatus
+  title?: string | null
+  message: string
+  created_at: string
+  sent_at?: string | null
+  retry_count: number
+}
+
+/** WebSocket Real-Time Event Message */
+export interface WebSocketMessage<T = unknown> {
+  event: string
+  data?: T
+  timestamp?: string
+  session_id?: string
+  token_public_id?: string
+  counter_id?: string
+  message?: string
+}
+
 /** API error response */
 export interface ApiError {
   detail: string

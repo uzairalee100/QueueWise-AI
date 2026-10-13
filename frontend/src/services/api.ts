@@ -11,6 +11,7 @@ import type {
   Counter,
   QueueSummaryResponse,
   WaitEstimateDetail,
+  NotificationResponse,
 } from '../types/api'
 
 const API_BASE = '/api/v1'
@@ -153,4 +154,9 @@ export async function getProspectiveWaitEstimate(
   return apiGet<WaitEstimateDetail>(
     `/queues/${serviceId}/estimate?priority=${priority}&session_id=${encodeURIComponent(sessionId)}`,
   )
+}
+
+/** Notifications for a token */
+export async function getNotifications(tokenPublicId: string): Promise<NotificationResponse[]> {
+  return apiGet<NotificationResponse[]>(`/notifications/${encodeURIComponent(tokenPublicId)}`)
 }
