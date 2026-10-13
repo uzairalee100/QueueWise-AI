@@ -1,22 +1,25 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useLanguage } from '../context/LanguageContext'
 
 /**
  * QueueWise AI — Citizen Home Page
  *
  * The primary landing page with three main actions:
- * 1. Token Lo — Get a Token
- * 2. Mera Token — Check My Token
+ * 1. Token Lo — Get a Token -> Navigates to /kiosk
+ * 2. Mera Token — Check My Token -> Navigates to /track
  * 3. Madad — Get Help
- *
- * Also shows a backend connectivity check and animated hero.
  */
 export function HomePage() {
+  const navigate = useNavigate()
+  const { t, isRTL } = useLanguage()
   const [backendStatus, setBackendStatus] = useState<'checking' | 'online' | 'offline'>('checking')
+  const [showHelpModal, setShowHelpModal] = useState<boolean>(false)
 
   useEffect(() => {
     fetch('/health')
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         if (data.status === 'healthy') {
           setBackendStatus('online')
         } else {
@@ -27,7 +30,7 @@ export function HomePage() {
   }, [])
 
   return (
-    <div className="animate-fade-in">
+    <div className={`animate-fade-in ${isRTL ? 'font-urdu' : ''}`}>
       {/* Hero Section */}
       <section className="px-4 sm:px-6 pt-12 pb-16 sm:pt-20 sm:pb-24">
         <div className="max-w-4xl mx-auto text-center">
@@ -35,7 +38,7 @@ export function HomePage() {
           <div className="inline-flex items-center gap-2 glass-light rounded-full px-4 py-2 mb-8 animate-float">
             <span className="w-2 h-2 rounded-full bg-accent-400" />
             <span className="text-sm text-surface-200 font-medium">
-              Public Service Queue Optimizer
+              SC-03 Public Service Queue Optimizer
             </span>
           </div>
 
@@ -52,8 +55,7 @@ export function HomePage() {
 
           {/* Subtitle */}
           <p className="text-lg sm:text-xl text-surface-200/80 max-w-2xl mx-auto mb-12 leading-relaxed">
-            Get your digital token, track your queue position, and know exactly
-            when it's your turn — at hospitals, banks, and government offices.
+            {t.tagline}
           </p>
 
           {/* Three primary action cards */}
@@ -61,6 +63,7 @@ export function HomePage() {
             {/* Get a Token */}
             <ActionCard
               id="action-get-token"
+              onClick={() => navigate('/kiosk')}
               icon={
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="2" y="2" width="20" height="20" rx="3" />
@@ -68,9 +71,9 @@ export function HomePage() {
                   <path d="M8 12h8" />
                 </svg>
               }
-              title="Token Lo"
-              subtitle="Get a Token"
-              description="Join the queue for any service"
+              title={t.tokenLo}
+              subtitle={t.tokenLoSub}
+              description={t.tokenLoDesc}
               gradient="from-primary-600 to-primary-700"
               hoverGlow="shadow-primary-500/30"
             />
@@ -78,15 +81,16 @@ export function HomePage() {
             {/* Check My Token */}
             <ActionCard
               id="action-check-token"
+              onClick={() => navigate('/track')}
               icon={
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10" />
                   <path d="M12 6v6l4 2" />
                 </svg>
               }
-              title="Mera Token"
-              subtitle="Check My Token"
-              description="View your queue position & wait"
+              title={t.meraToken}
+              subtitle={t.meraTokenSub}
+              description={t.meraTokenDesc}
               gradient="from-accent-600 to-accent-700"
               hoverGlow="shadow-accent-500/30"
             />
@@ -94,6 +98,7 @@ export function HomePage() {
             {/* Get Help */}
             <ActionCard
               id="action-help"
+              onClick={() => setShowHelpModal(true)}
               icon={
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10" />
@@ -101,9 +106,9 @@ export function HomePage() {
                   <path d="M12 17h.01" />
                 </svg>
               }
-              title="Madad"
-              subtitle="Get Help"
-              description="Instructions & voice assistance"
+              title={t.madad}
+              subtitle={t.madadSub}
+              description={t.madadDesc}
               gradient="from-violet-600 to-violet-700"
               hoverGlow="shadow-violet-500/30"
             />
@@ -116,25 +121,33 @@ export function HomePage() {
         <div className="max-w-md mx-auto">
           <div className="glass-card p-4 flex items-center justify-between" id="backend-status">
             <div className="flex items-center gap-3">
-              <div className={`w-3 h-3 rounded-full ${
-                backendStatus === 'online' ? 'bg-success-400 animate-pulse' :
-                backendStatus === 'offline' ? 'bg-danger-400' :
-                'bg-warning-400 animate-pulse'
-              }`} />
+              <div
+                className={`w-3 h-3 rounded-full ${
+                  backendStatus === 'online'
+                    ? 'bg-success-400 animate-pulse'
+                    : backendStatus === 'offline'
+                    ? 'bg-danger-400'
+                    : 'bg-warning-400 animate-pulse'
+                }`}
+              />
               <span className="text-sm font-medium text-surface-200">
                 Backend API
               </span>
             </div>
-            <span className={`text-xs font-semibold px-3 py-1 rounded-full ${
-              backendStatus === 'online'
-                ? 'bg-success-400/10 text-success-400'
+            <span
+              className={`text-xs font-semibold px-3 py-1 rounded-full ${
+                backendStatus === 'online'
+                  ? 'bg-success-400/10 text-success-400'
+                  : backendStatus === 'offline'
+                  ? 'bg-danger-400/10 text-danger-400'
+                  : 'bg-warning-400/10 text-warning-400'
+              }`}
+            >
+              {backendStatus === 'online'
+                ? '● Connected'
                 : backendStatus === 'offline'
-                ? 'bg-danger-400/10 text-danger-400'
-                : 'bg-warning-400/10 text-warning-400'
-            }`}>
-              {backendStatus === 'online' ? '● Connected' :
-               backendStatus === 'offline' ? '○ Offline' :
-               '◌ Checking...'}
+                ? '○ Offline'
+                : '◌ Checking...'}
             </span>
           </div>
         </div>
@@ -149,31 +162,59 @@ export function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 stagger">
             <FeatureCard
               step="1"
-              title="Get Your Token"
-              description="Select a service and receive a unique digital token with a QR code."
+              title="1. Issue Digital Token"
+              description="Pick your desired service on the touch kiosk to receive a token number & QR code."
             />
             <FeatureCard
               step="2"
-              title="Track Your Position"
-              description="See your real-time queue position and dynamic wait-time estimate."
+              title="2. Real-Time Tracking"
+              description="Open the tracker on your mobile to view live position ahead and estimated wait."
             />
             <FeatureCard
               step="3"
-              title="Get Notified"
-              description="Receive alerts when your turn is approaching — no more guessing."
+              title="3. Instant Notifications"
+              description="Get audible and visual alerts when your turn approaches or is called."
             />
             <FeatureCard
               step="4"
-              title="Get Served"
-              description="When called, head to the counter and get the service you need."
+              title="4. Proceed to Counter"
+              description="When called, proceed to your assigned counter with zero guesswork."
             />
           </div>
         </div>
       </section>
+
+      {/* Help Modal */}
+      {showHelpModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+          <div className="bg-surface-900 border border-white/10 rounded-3xl max-w-md w-full p-6 text-left shadow-2xl">
+            <h3 className="text-xl font-bold text-white mb-2">{t.madadSub}</h3>
+            <div className="space-y-4 my-4 text-xs text-surface-200/80 leading-relaxed">
+              <div className="p-3 rounded-xl bg-surface-950 border border-white/5">
+                <span className="font-bold text-primary-400 block mb-1">1. How to get a token?</span>
+                Click "Token Lo", choose your required service (e.g. General, Pharmacy), and tap "Issue Token".
+              </div>
+              <div className="p-3 rounded-xl bg-surface-950 border border-white/5">
+                <span className="font-bold text-accent-400 block mb-1">2. How to track my position?</span>
+                Scan the QR code on your mobile phone or click "Mera Token" and enter your token number.
+              </div>
+              <div className="p-3 rounded-xl bg-surface-950 border border-white/5">
+                <span className="font-bold text-success-400 block mb-1">3. What should I do when called?</span>
+                When your screen pulses green and chimes, proceed immediately to the counter indicated on your screen.
+              </div>
+            </div>
+            <button
+              onClick={() => setShowHelpModal(false)}
+              className="w-full py-3 rounded-xl btn-primary font-bold text-xs cursor-pointer"
+            >
+              {t.close}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
-
 
 /* ===== Sub-components ===== */
 
@@ -185,12 +226,23 @@ interface ActionCardProps {
   description: string
   gradient: string
   hoverGlow: string
+  onClick?: () => void
 }
 
-function ActionCard({ id, icon, title, subtitle, description, gradient, hoverGlow }: ActionCardProps) {
+function ActionCard({
+  id,
+  icon,
+  title,
+  subtitle,
+  description,
+  gradient,
+  hoverGlow,
+  onClick,
+}: ActionCardProps) {
   return (
     <button
       id={id}
+      onClick={onClick}
       className={`
         glass-card p-6 sm:p-8 flex flex-col items-center gap-4 text-center
         cursor-pointer group animate-slide-up
@@ -199,11 +251,13 @@ function ActionCard({ id, icon, title, subtitle, description, gradient, hoverGlo
       tabIndex={0}
       aria-label={`${title} — ${subtitle}`}
     >
-      <div className={`
+      <div
+        className={`
         w-16 h-16 rounded-2xl bg-gradient-to-br ${gradient}
         flex items-center justify-center text-white
         shadow-lg group-hover:scale-110 transition-transform duration-300
-      `}>
+      `}
+      >
         {icon}
       </div>
       <div>
@@ -214,7 +268,6 @@ function ActionCard({ id, icon, title, subtitle, description, gradient, hoverGlo
     </button>
   )
 }
-
 
 interface FeatureCardProps {
   step: string

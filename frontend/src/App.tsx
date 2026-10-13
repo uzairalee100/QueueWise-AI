@@ -1,24 +1,24 @@
 import { Routes, Route } from 'react-router-dom'
+import { LanguageProvider } from './context/LanguageContext'
 import { Layout } from './components/Layout'
 import { HomePage } from './pages/HomePage'
+import { KioskPage } from './pages/KioskPage'
+import { TrackTokenPage } from './pages/TrackTokenPage'
 
 function App() {
   return (
-    <Routes>
-      <Route element={<Layout />}>
-        <Route path="/" element={<HomePage />} />
-        {/* Future routes — added per milestone:
-          <Route path="/services" element={<ServiceSelection />} />
-          <Route path="/token/:publicId" element={<TokenStatus />} />
-          <Route path="/staff" element={<StaffDashboard />} />
-          <Route path="/staff/counters" element={<CounterManagement />} />
-          <Route path="/analytics" element={<Analytics />} />
-          <Route path="/simulation" element={<SimulationLab />} />
-          <Route path="/assistant" element={<AIAssistant />} />
-          <Route path="/settings" element={<Settings />} />
-        */}
-      </Route>
-    </Routes>
+    <LanguageProvider>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/kiosk" element={<KioskPage />} />
+          <Route path="/services" element={<KioskPage />} />
+          <Route path="/track" element={<TrackTokenPage />} />
+          <Route path="/track/:publicId" element={<TrackTokenPage />} />
+          <Route path="/token/:publicId" element={<TrackTokenPage />} />
+        </Route>
+      </Routes>
+    </LanguageProvider>
   )
 }
 

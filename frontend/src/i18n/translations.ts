@@ -1,0 +1,177 @@
+/**
+ * QueueWise AI — Multilingual Dictionaries (English & Urdu)
+ *
+ * Designed for low-literacy clarity and bilingual public service access.
+ */
+
+export type Language = 'en' | 'ur'
+
+export const translations = {
+  en: {
+    // Header & Brand
+    brandName: 'QueueWise AI',
+    tagline: 'Smarter Queues. Less Waiting. Better Public Services.',
+    systemOnline: 'System Online',
+    home: 'Home',
+    kiosk: 'Issue Token',
+    trackToken: 'Track Token',
+
+    // Home actions
+    tokenLo: 'Token Lo',
+    tokenLoSub: 'Get a Digital Token',
+    tokenLoDesc: 'Select your service & join the queue in 1 tap',
+    meraToken: 'Mera Token',
+    meraTokenSub: 'Check My Token',
+    meraTokenDesc: 'Track live position & estimated wait time',
+    madad: 'Madad',
+    madadSub: 'How It Works & Help',
+    madadDesc: 'Simple guidelines for all citizens',
+
+    // Kiosk Page
+    kioskTitle: 'Public Service Token Kiosk',
+    kioskSubtitle: 'Please select your desired service counter below',
+    chooseService: 'Choose Service',
+    activeCounters: 'Active Counters',
+    waitingQueue: 'Waiting in Queue',
+    estimatedWait: 'Estimated Wait',
+    stalledWarning: 'Notice: Counters momentarily paused. Estimates based on normal flow.',
+    priorityTitle: 'Special Assistance / Priority',
+    priorityStandard: 'Standard / Regular (عام)',
+    prioritySenior: 'Senior Citizen / Differently Abled / Emergency (خصوصی سہولت)',
+    phoneOptional: 'Mobile Number (Optional for SMS / Tracking)',
+    phonePlaceholder: 'e.g. 0300 1234567',
+    issueTokenBtn: 'Print / Issue Digital Token',
+    issuing: 'Issuing Token...',
+
+    // Token Issued Modal
+    tokenIssuedTitle: 'Token Issued Successfully!',
+    yourTokenNumber: 'Your Token Number',
+    keepThisSafe: 'Keep this screen open or scan QR code to track on your phone',
+    scanToTrack: 'Scan QR Code on Mobile',
+    trackOnDevice: 'Track My Token Now',
+    printSimulation: 'Print Token Slip',
+    close: 'Close',
+
+    // Tracking Page
+    trackTitle: 'Live Queue Tracker',
+    enterTokenPrompt: 'Enter your Token Number or Public ID to track:',
+    lookupBtn: 'Track Token',
+    tokenNotFound: 'Token not found. Please verify the code or issue a new token.',
+    peopleAhead: 'People Ahead of You',
+    estTimeRemaining: 'Estimated Wait Time',
+    serviceCategory: 'Service',
+    issuedAt: 'Issued At',
+    calledTo: 'Please Proceed To',
+    counter: 'Counter',
+    cancelToken: 'Cancel My Token',
+    cancelConfirmTitle: 'Cancel this Token?',
+    cancelConfirmDesc: 'Are you sure you want to cancel? You will lose your position in line.',
+    confirmCancelBtn: 'Yes, Cancel Token',
+    keepTokenBtn: 'No, Keep My Place',
+
+    // Status Badges & Alerts
+    statusWaiting: 'Waiting in Line',
+    statusWaitingDesc: 'Please relax in the waiting area. We will notify you when called.',
+    statusApproaching: 'Almost Your Turn!',
+    statusApproachingDesc: 'You are next in line! Please move closer to the service counters.',
+    statusCalled: "IT'S YOUR TURN!",
+    statusCalledDesc: 'Please proceed immediately to the assigned counter.',
+    statusServing: 'Currently Being Served',
+    statusServingDesc: 'Service in progress at the counter.',
+    statusCompleted: 'Service Completed',
+    statusCompletedDesc: 'Your request has been completed. Thank you for using QueueWise AI.',
+    statusSkipped: 'Token Skipped',
+    statusSkippedDesc: 'Your token was called but you were not present. Please speak with reception.',
+    statusCancelled: 'Token Cancelled',
+    statusCancelledDesc: 'This token has been cancelled.',
+
+    // Notifications
+    notificationsTitle: 'Live Updates & Alerts',
+    noNotifications: 'No alerts yet. Updates will appear here in real time.',
+    soundAlert: 'Sound Alerts Active',
+  },
+
+  ur: {
+    // Header & Brand
+    brandName: 'کیو وائز اے آئی',
+    tagline: 'بہتر قطاریں، کم انتظار، آسان عوامی سہولیات',
+    systemOnline: 'نظام فعال ہے',
+    home: 'ہوم',
+    kiosk: 'ٹوکن حاصل کریں',
+    trackToken: 'ٹوکن چیک کریں',
+
+    // Home actions
+    tokenLo: 'ٹوکن حاصل کریں',
+    tokenLoSub: 'نیا ٹوکن لیں',
+    tokenLoDesc: 'ایک کلک میں اپنی خدمت منتخب کریں اور قطار میں شامل ہوں',
+    meraToken: 'میرا ٹوکن',
+    meraTokenSub: 'اپنا ٹوکن دیکھیں',
+    meraTokenDesc: 'قطار میں اپنی موجودہ پوزیشن اور انتظار کا وقت دیکھیں',
+    madad: 'مدد و رہنمائی',
+    madadSub: 'طریقہ کار اور مدد',
+    madadDesc: 'شہریوں کی آسانی کے لیے آسان ہدایات',
+
+    // Kiosk Page
+    kioskTitle: 'ڈیجیٹل ٹوکن کیوسک',
+    kioskSubtitle: 'براہ کرم اپنی مطلوبہ خدمت کا انتخاب فرمائیں',
+    chooseService: 'خدمت کا انتخاب',
+    activeCounters: 'فعال کاؤنٹرز',
+    waitingQueue: 'قطار میں منتظر افراد',
+    estimatedWait: 'متوقع انتظار',
+    stalledWarning: 'اطلاع: کاؤنٹرز وقتی طور پر موقوف ہیں۔ سروس جلد بحال ہو جائے گی۔',
+    priorityTitle: 'خصوصی ترجیح / سہولت',
+    priorityStandard: 'عام شہری (Standard)',
+    prioritySenior: 'معمر شہری / خصوصی افراد / فوری (Priority)',
+    phoneOptional: 'موبائل نمبر (اختیاری)',
+    phonePlaceholder: 'مثلاً: 03001234567',
+    issueTokenBtn: 'ٹوکن حاصل کریں',
+    issuing: 'ٹوکن جاری ہو رہا ہے...',
+
+    // Token Issued Modal
+    tokenIssuedTitle: 'ٹوکن کامیابی سے جاری ہو گیا!',
+    yourTokenNumber: 'آپ کا ٹوکن نمبر',
+    keepThisSafe: 'یہ اسکرین کھلی رکھیں یا موبائل پر ٹریک کرنے کے لیے QR کوڈ اسکین کریں',
+    scanToTrack: 'موبائل پر اسکین کریں',
+    trackOnDevice: 'ابھی لائیو ٹریک کریں',
+    printSimulation: 'ٹوکن پرچی پرنٹ کریں',
+    close: 'بند کریں',
+
+    // Tracking Page
+    trackTitle: 'لائیو قطار ٹریکر',
+    enterTokenPrompt: 'اپنا ٹوکن نمبر درج کریں:',
+    lookupBtn: 'تلاش کریں',
+    tokenNotFound: 'ٹوکن نہیں ملا۔ براہ کرم نمبر چیک کریں یا نیا ٹوکن حاصل کریں۔',
+    peopleAhead: 'آپ سے آگے افراد',
+    estTimeRemaining: 'متوقع باقی وقت',
+    serviceCategory: 'خدمت',
+    issuedAt: 'جاری ہونے کا وقت',
+    calledTo: 'براہ کرم تشریف لائیں',
+    counter: 'کاؤنٹر',
+    cancelToken: 'ٹوکن منسوخ کریں',
+    cancelConfirmTitle: 'کیا آپ ٹوکن منسوخ کرنا چاہتے ہیں؟',
+    cancelConfirmDesc: 'منسوخی کی صورت میں آپ قطار میں اپنی باری کھو دیں گے۔',
+    confirmCancelBtn: 'جی ہاں، منسوخ کریں',
+    keepTokenBtn: 'نہیں، ٹوکن برقرار رکھیں',
+
+    // Status Badges & Alerts
+    statusWaiting: 'قطار میں منتظر',
+    statusWaitingDesc: 'براہ کرم انتظار گاہ میں تشریف رکھیں۔ باری آنے پر مطلع کیا جائے گا۔',
+    statusApproaching: 'آپ کی باری قریب ہے!',
+    statusApproachingDesc: 'آپ اگلے ہیں! براہ کرم کاؤنٹر کے قریب تشریف لے آئیں۔',
+    statusCalled: 'آپ کی باری ہے!',
+    statusCalledDesc: 'براہ کرم فوری طور پر متعلقہ کاؤنٹر پر تشریف لے جائیں۔',
+    statusServing: 'خدمت جاری ہے',
+    statusServingDesc: 'کاؤنٹر پر آپ کی خدمت کا عمل جاری ہے۔',
+    statusCompleted: 'خدمت مکمل ہو گئی',
+    statusCompletedDesc: 'آپ کی خدمت مکمل ہو گئی۔ کیو وائز اے آئی استعمال کرنے کا شکریہ۔',
+    statusSkipped: 'ٹوکن چھوڑ دیا گیا',
+    statusSkippedDesc: 'پکارے جانے پر آپ موجود نہیں تھے۔ براہ کرم ہیلپ ڈیسک سے رابطہ کریں۔',
+    statusCancelled: 'ٹوکن منسوخ ہو چکا ہے',
+    statusCancelledDesc: 'یہ ٹوکن منسوخ کر دیا گیا ہے۔',
+
+    // Notifications
+    notificationsTitle: 'لائیو اطلاعات و پیغامات',
+    noNotifications: 'ابھی کوئی الرٹ نہیں ہے۔ پیغامات یہاں ظاہر ہوں گے۔',
+    soundAlert: 'صوتی الرٹس فعال ہیں',
+  },
+}
