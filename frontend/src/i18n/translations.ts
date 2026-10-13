@@ -141,10 +141,25 @@ export const translations = {
     priorityRatioLabel: 'Priority Influx Ratio (%)',
     noShowRateLabel: 'No-Show Rate (%)',
     serviceDurationMultLabel: 'Service Duration Multiplier',
-    randomSeedLabel: 'Deterministic RNG Seed',
     tokenThroughput: 'Throughput',
     unservedTokens: 'Unserved at Cutoff',
     optimizationImpact: 'Optimization Impact',
+
+    // Operational Analytics
+    analytics: 'Analytics',
+    analyticsSubtitle: 'Live Supervisor Telemetry & Real-Event Operational Metrics',
+    timeRange: 'Time Range',
+    today: 'Today (24h)',
+    past7Days: 'Past 7 Days',
+    past30Days: 'Past 30 Days',
+    allTime: 'All Time',
+    completionRate: 'Completion Rate',
+    avgServiceDuration: 'Avg Service Duration',
+    hourlyVolume: 'Hourly Volume & Rush Hour Trends',
+    servicePerformance: 'Service Categories Breakdown',
+    counterEfficiency: 'Counter Desk Performance',
+    auditLogTitle: 'Live Service Event Audit Trail',
+    liveRefresh: 'Live Auto-Refresh (5s)',
   },
 
   ur: {
@@ -285,5 +300,21 @@ export const translations = {
     tokenThroughput: 'سروس کی شرح (فی گھنٹہ)',
     unservedTokens: 'باقی رہ جانے والے ٹوکنز',
     optimizationImpact: 'آپٹیمائزیشن کے اثرات',
+
+    // Operational Analytics
+    analytics: 'تجزیات و رپورٹ',
+    analyticsSubtitle: 'نگران ڈیش بورڈ اور اصل واقعات کے لائیو اعداد و شمار',
+    timeRange: 'وقت کا انتخاب',
+    today: 'آج (24 گھنٹے)',
+    past7Days: 'گزشتہ 7 دن',
+    past30Days: 'گزشتہ 30 دن',
+    allTime: 'تمام ریکارڈز',
+    completionRate: 'تکمیل کا تناسب',
+    avgServiceDuration: 'اوسط سروس کا وقت',
+    hourlyVolume: 'گھنٹہ وار ٹریفک کی تقسیم',
+    servicePerformance: 'خدمات کی کارکردگی',
+    counterEfficiency: 'کاؤنٹرز کی کارکردگی اور مصروفیت',
+    auditLogTitle: 'لائیو واقعات کا مکمل ریکارڈ (آڈٹ لاگ)',
+    liveRefresh: 'خودکار تجدید (5 سیکنڈ)',
   },
 }

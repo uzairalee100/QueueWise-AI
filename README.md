@@ -161,7 +161,7 @@ See [`.env.example`](.env.example) for all configuration options. Key settings:
 - [x] **M5: Citizen Experience** — Mobile-first kiosk, live queue tracking, Web Audio alerts
 - [x] **M6: Staff Operations Dashboard** — Counter desk, call/serve/complete/skip/recall lifecycle
 - [x] **M7: Simulation Lab & Optimizer** — Scenarios A–F, estimate vs actual fidelity, M/M/c optimizer
-- [ ] **M8: Operational Analytics** — Aggregated historical metrics, charts, service times
+- [x] **M8: Operational Analytics** — Aggregated historical metrics, charts, service times
 - [ ] **M9: AI Operations Agent** — LangGraph, evidence-based recommendations
 - [ ] **M10: MCP & Voice** — MCP tool server, bilingual voice assistant
 - [ ] **M11: Security, Demo & Delivery** — Auth review, complete test suite, demo seed

@@ -353,3 +353,87 @@ export interface OptimizerResponse {
   actionable_recommendations_ur: string[]
 }
 
+/** Operational Analytics Summary */
+export interface AnalyticsSummary {
+  period_start?: string | null
+  period_end?: string | null
+  total_tokens_issued: number
+  tokens_completed: number
+  tokens_currently_waiting: number
+  tokens_currently_serving: number
+  tokens_skipped: number
+  tokens_cancelled: number
+  completion_rate_pct: number
+  no_show_rate_pct: number
+  cancellation_rate_pct: number
+  avg_wait_seconds: number
+  median_wait_seconds: number
+  p95_wait_seconds: number
+  max_wait_seconds: number
+  avg_service_seconds: number
+  target_sla_seconds: number
+  sla_breach_count: number
+  sla_compliance_pct: number
+  active_counters_count: number
+  total_counters_count: number
+  avg_counter_utilization_pct: number
+}
+
+/** Hourly Traffic Volume Point */
+export interface HourlyTrafficPoint {
+  hour: number
+  hour_label: string
+  arrivals_count: number
+  completed_count: number
+  avg_wait_seconds: number
+}
+
+/** Service Category Analytics */
+export interface ServiceAnalyticsItem {
+  service_id: string
+  service_code: string
+  service_name: string
+  total_issued: number
+  completed: number
+  skipped: number
+  cancelled: number
+  currently_waiting: number
+  avg_wait_seconds: number
+  avg_service_seconds: number
+  sla_compliance_pct: number
+}
+
+/** Physical Counter Analytics */
+export interface CounterAnalyticsItem {
+  counter_id: string
+  counter_name: string
+  current_status: string
+  supported_services: string[]
+  tokens_served: number
+  avg_service_seconds: number
+  total_busy_seconds: number
+  utilization_pct: number
+}
+
+/** Immutable Audit Service Event Item */
+export interface ServiceEventLogItem {
+  id: string
+  timestamp: string
+  event_type: string
+  token_display_number?: string | null
+  counter_name?: string | null
+  reason?: string | null
+  actor_id?: string | null
+  extra_data?: Record<string, unknown> | null
+}
+
+/** Full Operational Analytics Dashboard Response */
+export interface OperationalAnalyticsResponse {
+  summary: AnalyticsSummary
+  hourly_trends: HourlyTrafficPoint[]
+  services: ServiceAnalyticsItem[]
+  counters: CounterAnalyticsItem[]
+  recent_events: ServiceEventLogItem[]
+}
+
+

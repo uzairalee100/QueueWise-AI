@@ -6,6 +6,7 @@ import { KioskPage } from './pages/KioskPage'
 import { TrackTokenPage } from './pages/TrackTokenPage'
 import { StaffDashboardPage } from './pages/StaffDashboardPage'
 import { SimulationLabPage } from './pages/SimulationLabPage'
+import { AnalyticsPage } from './pages/AnalyticsPage'
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/dashboard" element={<StaffDashboardPage />} />
           <Route path="/simulation" element={<SimulationLabPage />} />
           <Route path="/sim" element={<SimulationLabPage />} />
+          <Route path="/analytics" element={<AnalyticsPage />} />
         </Route>
       </Routes>
     </LanguageProvider>

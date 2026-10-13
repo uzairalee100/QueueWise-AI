@@ -390,12 +390,52 @@ Calculates deterministic counter allocation recommendations using M/M/c queue th
 
 ---
 
+## Operational Analytics (Milestone 8)
+
+### Summary Operational KPIs
+```http
+GET /api/v1/analytics/summary?hours_back=24&sla_seconds=600
+```
+Returns high-level throughput, completion rate, wait time averages, service durations, SLA compliance %, and counter utilization computed directly from database records.
+
+### Hourly Traffic Trends
+```http
+GET /api/v1/analytics/hourly?hours_back=24
+```
+Returns hourly 24-bucket volume (arrivals, completions, average waits) for traffic trend and peak rush hour analysis.
+
+### Service Category Analytics
+```http
+GET /api/v1/analytics/services?hours_back=24&sla_seconds=600
+```
+Returns volume, wait times, durations, and SLA compliance grouped by service category code.
+
+### Counter Desk Efficiency
+```http
+GET /api/v1/analytics/counters?hours_back=24
+```
+Returns tokens served, busy time, and utilization percentage per physical service counter.
+
+### Service Event Audit Trail
+```http
+GET /api/v1/analytics/events?limit=50
+```
+Returns immutable operational event audit log from the `ServiceEvent` table.
+
+### Full Supervisor Dashboard
+```http
+GET /api/v1/analytics/dashboard?hours_back=24&sla_seconds=600
+```
+Unified endpoint aggregating all analytics subsystems for supervisor monitoring.
+
+---
+
 ## Upcoming Endpoints
 
-### Milestone 8 (Operational Analytics)
-- `GET /api/v1/analytics/summary`
-- `GET /api/v1/analytics/queues`
-
-### Milestone 10 (AI Operations Agent)
+### Milestone 9 (AI Operations Agent)
 - `POST /api/v1/agent/ask`
+
+### Milestone 10 (MCP & Voice)
+- `POST /api/v1/mcp/tools`
+- `POST /api/v1/voice/query`
 

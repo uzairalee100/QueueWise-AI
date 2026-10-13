@@ -17,6 +17,12 @@ import type {
   SimulationRunCreatePayload,
   SimulationRunResponse,
   OptimizerResponse,
+  AnalyticsSummary,
+  HourlyTrafficPoint,
+  ServiceAnalyticsItem,
+  CounterAnalyticsItem,
+  ServiceEventLogItem,
+  OperationalAnalyticsResponse,
 } from '../types/api'
 
 const API_BASE = '/api/v1'
@@ -224,3 +230,79 @@ export async function optimizeCounters(payload: {
 }): Promise<OptimizerResponse> {
   return apiPost<OptimizerResponse>('/simulation/optimizer/recommend', payload)
 }
+
+/** --- Operational Analytics APIs --- */
+
+export async function getAnalyticsSummary(params?: {
+  hoursBack?: number
+  sessionId?: string
+  includeSimulations?: boolean
+  slaSeconds?: number
+}): Promise<AnalyticsSummary> {
+  const query = new URLSearchParams()
+  if (params?.hoursBack) query.set('hours_back', String(params.hoursBack))
+  if (params?.sessionId) query.set('session_id', params.sessionId)
+  if (params?.includeSimulations !== undefined) query.set('include_simulations', String(params.includeSimulations))
+  if (params?.slaSeconds) query.set('sla_seconds', String(params.slaSeconds))
+  const qs = query.toString() ? `?${query.toString()}` : ''
+  return apiGet<AnalyticsSummary>(`/analytics/summary${qs}`)
+}
+
+export async function getHourlyTrends(params?: {
+  hoursBack?: number
+  sessionId?: string
+  includeSimulations?: boolean
+}): Promise<HourlyTrafficPoint[]> {
+  const query = new URLSearchParams()
+  if (params?.hoursBack) query.set('hours_back', String(params.hoursBack))
+  if (params?.sessionId) query.set('session_id', params.sessionId)
+  if (params?.includeSimulations !== undefined) query.set('include_simulations', String(params.includeSimulations))
+  const qs = query.toString() ? `?${query.toString()}` : ''
+  return apiGet<HourlyTrafficPoint[]>(`/analytics/hourly${qs}`)
+}
+
+export async function getServiceAnalytics(params?: {
+  hoursBack?: number
+  sessionId?: string
+  includeSimulations?: boolean
+  slaSeconds?: number
+}): Promise<ServiceAnalyticsItem[]> {
+  const query = new URLSearchParams()
+  if (params?.hoursBack) query.set('hours_back', String(params.hoursBack))
+  if (params?.sessionId) query.set('session_id', params.sessionId)
+  if (params?.includeSimulations !== undefined) query.set('include_simulations', String(params.includeSimulations))
+  if (params?.slaSeconds) query.set('sla_seconds', String(params.slaSeconds))
+  const qs = query.toString() ? `?${query.toString()}` : ''
+  return apiGet<ServiceAnalyticsItem[]>(`/analytics/services${qs}`)
+}
+
+export async function getCounterAnalytics(params?: {
+  hoursBack?: number
+  includeSimulations?: boolean
+}): Promise<CounterAnalyticsItem[]> {
+  const query = new URLSearchParams()
+  if (params?.hoursBack) query.set('hours_back', String(params.hoursBack))
+  if (params?.includeSimulations !== undefined) query.set('include_simulations', String(params.includeSimulations))
+  const qs = query.toString() ? `?${query.toString()}` : ''
+  return apiGet<CounterAnalyticsItem[]>(`/analytics/counters${qs}`)
+}
+
+export async function getRecentAuditEvents(limit: number = 50): Promise<ServiceEventLogItem[]> {
+  return apiGet<ServiceEventLogItem[]>(`/analytics/events?limit=${limit}`)
+}
+
+export async function getOperationalDashboard(params?: {
+  hoursBack?: number
+  sessionId?: string
+  includeSimulations?: boolean
+  slaSeconds?: number
+}): Promise<OperationalAnalyticsResponse> {
+  const query = new URLSearchParams()
+  if (params?.hoursBack) query.set('hours_back', String(params.hoursBack))
+  if (params?.sessionId) query.set('session_id', params.sessionId)
+  if (params?.includeSimulations !== undefined) query.set('include_simulations', String(params.includeSimulations))
+  if (params?.slaSeconds) query.set('sla_seconds', String(params.slaSeconds))
+  const qs = query.toString() ? `?${query.toString()}` : ''
+  return apiGet<OperationalAnalyticsResponse>(`/analytics/dashboard${qs}`)
+}
+
