@@ -26,7 +26,7 @@ import type {
 type TimeFilter = '24h' | '7d' | '30d' | 'all'
 
 export function AnalyticsPage() {
-  const { lang, t } = useLanguage()
+  const { lang, t, isRTL } = useLanguage()
 
   // State
   const [timeFilter, setTimeFilter] = useState<TimeFilter>('24h')
@@ -90,7 +90,7 @@ export function AnalyticsPage() {
     : 1
 
   return (
-    <div className="space-y-8 pb-16">
+    <div className={`space-y-8 pb-16 px-4 sm:px-6 max-w-7xl mx-auto ${isRTL ? 'font-urdu' : ''}`}>
       {/* Page Header */}
       <div className="relative overflow-hidden rounded-3xl border border-slate-700/60 bg-gradient-to-br from-slate-900/90 via-slate-800/80 to-blue-950/40 p-6 sm:p-8 backdrop-blur-xl shadow-2xl">
         <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-blue-500/10 blur-3xl" />

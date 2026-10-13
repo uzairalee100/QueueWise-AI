@@ -5,7 +5,6 @@
  * - Direct queries against live database state (counters, queues, analytics)
  * - Zero hallucination guaranteed: citations and metrics metadata disclosed
  * - Multilingual support (English & Urdu)
- * - Speech synthesis (audio readout) & Speech-to-text voice input
  * - Quick prompt chips and action shortcuts
  */
 import { useState, useEffect, useRef } from 'react'
@@ -40,13 +39,8 @@ export function AgentPage() {
   const [loading, setLoading] = useState(false)
   const [capabilities, setCapabilities] = useState<AgentCapabilitiesResponse | null>(null)
   const [expandedGroundingId, setExpandedGroundingId] = useState<string | null>(null)
-  const [isListening, setIsListening] = useState(false)
-  const [speakingMessageId, setSpeakingMessageId] = useState<string | null>(null)
-  const [speechSupported, setSpeechSupported] = useState(false)
-  const [recognitionSupported, setRecognitionSupported] = useState(false)
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
-  const recognitionRef = useRef<unknown>(null)
 
   // Scroll to bottom on new message
   useEffect(() => {
@@ -55,19 +49,6 @@ export function AgentPage() {
 
   // Initial load: capabilities and initial greeting
   useEffect(() => {
-    // Check speech synthesis support
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      setSpeechSupported(true)
-    }
-
-    // Check speech recognition support
-    const SpeechRecognition =
-      (window as unknown as { SpeechRecognition?: unknown; webkitSpeechRecognition?: unknown }).SpeechRecognition ||
-      (window as unknown as { webkitSpeechRecognition?: unknown }).webkitSpeechRecognition
-    if (SpeechRecognition) {
-      setRecognitionSupported(true)
-    }
-
     // Fetch capabilities
     getAgentCapabilities()
       .then((caps) => {
@@ -101,89 +82,6 @@ export function AgentPage() {
       },
     ])
   }, [])
-
-  // Handle Speech Recognition (Microphone)
-  const toggleListening = () => {
-    if (isListening) {
-      if (recognitionRef.current) {
-        (recognitionRef.current as { stop: () => void }).stop()
-      }
-      setIsListening(false)
-      return
-    }
-
-    const SpeechRecognition =
-      (window as unknown as { SpeechRecognition?: new () => unknown; webkitSpeechRecognition?: new () => unknown })
-        .SpeechRecognition ||
-      (window as unknown as { webkitSpeechRecognition?: new () => unknown }).webkitSpeechRecognition
-
-    if (!SpeechRecognition) return
-
-    try {
-      const recognition = new SpeechRecognition() as {
-        continuous: boolean
-        interimResults: boolean
-        lang: string
-        onresult: (e: { results: Array<Array<{ transcript: string }>> }) => void
-        onerror: () => void
-        onend: () => void
-        start: () => void
-      }
-      recognitionRef.current = recognition
-      recognition.continuous = false
-      recognition.interimResults = false
-      recognition.lang = lang === 'ur' ? 'ur-PK' : 'en-US'
-
-      recognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript
-        if (transcript) {
-          setInputText(transcript)
-          handleSendQuery(transcript)
-        }
-      }
-
-      recognition.onerror = () => {
-        setIsListening(false)
-      }
-
-      recognition.onend = () => {
-        setIsListening(false)
-      }
-
-      recognition.start()
-      setIsListening(true)
-    } catch (err) {
-      console.warn('Speech recognition error:', err)
-      setIsListening(false)
-    }
-  }
-
-  // Handle Speech Synthesis (Read Aloud)
-  const handleReadAloud = (message: ChatMessage) => {
-    if (!('speechSynthesis' in window)) return
-
-    if (speakingMessageId === message.id) {
-      window.speechSynthesis.cancel()
-      setSpeakingMessageId(null)
-      return
-    }
-
-    window.speechSynthesis.cancel()
-    const contentToSpeak = lang === 'ur' && message.textUr ? message.textUr : message.text
-    const utterance = new SpeechSynthesisUtterance(contentToSpeak)
-    utterance.lang = lang === 'ur' ? 'ur-PK' : 'en-US'
-    utterance.rate = 1.0
-
-    utterance.onend = () => {
-      setSpeakingMessageId(null)
-    }
-    utterance.onerror = () => {
-      setSpeakingMessageId(null)
-    }
-
-    setSpeakingMessageId(message.id)
-    window.speechSynthesis.speak(utterance)
-  }
 
   // Submit Query
   const handleSendQuery = async (queryText?: string) => {
@@ -241,10 +139,6 @@ export function AgentPage() {
 
   // Clear Chat
   const handleClearChat = () => {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel()
-    }
-    setSpeakingMessageId(null)
     setMessages([])
   }
 
@@ -355,7 +249,6 @@ export function AgentPage() {
         <div className="flex flex-col gap-4 overflow-y-auto max-h-[560px] pr-1">
           {messages.map((msg) => {
             const isUser = msg.sender === 'user'
-            const isSpeaking = speakingMessageId === msg.id
 
             return (
               <div
@@ -394,32 +287,6 @@ export function AgentPage() {
                         </>
                       )}
                     </div>
-
-                    {/* Speech / Audio Readout button for Agent messages */}
-                    {!isUser && speechSupported && (
-                      <button
-                        type="button"
-                        onClick={() => handleReadAloud(msg)}
-                        className={`p-1 rounded-lg text-xs transition-colors flex items-center gap-1 cursor-pointer ${
-                          isSpeaking
-                            ? 'bg-accent-500 text-white animate-pulse'
-                            : 'text-surface-200/60 hover:text-white hover:bg-white/10'
-                        }`}
-                        title={isSpeaking ? t.stopSpeaking : t.speakResponse}
-                      >
-                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M11 5L6 9H2v6h4l5 4V5z"
-                          />
-                        </svg>
-                        <span className="text-[10px] hidden sm:inline">
-                          {isSpeaking ? t.stopSpeaking : t.speakResponse}
-                        </span>
-                      </button>
-                    )}
                   </div>
 
                   {/* Message Body Content */}
@@ -563,29 +430,7 @@ export function AgentPage() {
             }}
             className="flex items-center gap-2"
           >
-            {/* Microphone Voice Input Button */}
-            {recognitionSupported && (
-              <button
-                type="button"
-                onClick={toggleListening}
-                className={`p-3 rounded-2xl border transition-all cursor-pointer flex items-center justify-center shrink-0 ${
-                  isListening
-                    ? 'bg-rose-500 text-white border-rose-400 shadow-lg shadow-rose-500/30 animate-pulse'
-                    : 'glass-light border-white/10 text-surface-200/80 hover:text-white hover:border-white/20'
-                }`}
-                title={isListening ? 'Stop listening' : 'Speak inquiry'}
-                aria-label="Voice Input"
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
-                  />
-                </svg>
-              </button>
-            )}
+
 
             {/* Natural language query input */}
             <input

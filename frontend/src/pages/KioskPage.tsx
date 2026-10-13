@@ -154,7 +154,7 @@ export function KioskPage() {
                   >
                     <div>
                       <div className="flex items-center justify-between gap-2 mb-2">
-                        <span className="text-xs font-bold px-2.5 py-1 rounded-md bg-white/10 text-primary-300 tracking-wider">
+                        <span className="text-xs font-bold px-2.5 py-1 rounded-md bg-white/10 text-primary-300 tracking-wider dir-ltr font-mono">
                           {service.code}
                         </span>
                         <div className="flex items-center gap-1.5 text-xs">
@@ -188,7 +188,7 @@ export function KioskPage() {
                           {metrics ? metrics.waiting_count : 0} {t.waitingQueue}
                         </span>
                       </div>
-                      <div className="flex items-center gap-1 font-semibold text-accent-400">
+                      <div className="flex items-center gap-1 font-semibold text-accent-400 dir-ltr font-mono">
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
@@ -220,14 +220,14 @@ export function KioskPage() {
               <button
                 type="button"
                 onClick={() => setPriority(0)}
-                className={`p-3 rounded-xl text-sm font-medium transition-all text-left flex items-center gap-3 cursor-pointer ${
+                className={`p-3.5 rounded-xl text-sm font-medium transition-all text-start flex items-center gap-3 cursor-pointer min-h-[44px] ${
                   priority === 0
                     ? 'bg-primary-600/30 border border-primary-500 text-white font-semibold'
                     : 'bg-white/5 border border-white/5 text-surface-200/70 hover:bg-white/10'
                 }`}
               >
-                <span className="w-3 h-3 rounded-full border-2 border-primary-400 flex items-center justify-center">
-                  {priority === 0 && <span className="w-1.5 h-1.5 rounded-full bg-primary-400" />}
+                <span className="w-4 h-4 rounded-full border-2 border-primary-400 flex items-center justify-center shrink-0">
+                  {priority === 0 && <span className="w-2 h-2 rounded-full bg-primary-400" />}
                 </span>
                 <span>{t.priorityStandard}</span>
               </button>
@@ -235,14 +235,14 @@ export function KioskPage() {
               <button
                 type="button"
                 onClick={() => setPriority(1)}
-                className={`p-3 rounded-xl text-sm font-medium transition-all text-left flex items-center gap-3 cursor-pointer ${
+                className={`p-3.5 rounded-xl text-sm font-medium transition-all text-start flex items-center gap-3 cursor-pointer min-h-[44px] ${
                   priority === 1
                     ? 'bg-accent-600/30 border border-accent-500 text-white font-semibold'
                     : 'bg-white/5 border border-white/5 text-surface-200/70 hover:bg-white/10'
                 }`}
               >
-                <span className="w-3 h-3 rounded-full border-2 border-accent-400 flex items-center justify-center">
-                  {priority === 1 && <span className="w-1.5 h-1.5 rounded-full bg-accent-400" />}
+                <span className="w-4 h-4 rounded-full border-2 border-accent-400 flex items-center justify-center shrink-0">
+                  {priority === 1 && <span className="w-2 h-2 rounded-full bg-accent-400" />}
                 </span>
                 <span>{t.prioritySenior}</span>
               </button>
@@ -310,7 +310,7 @@ export function KioskPage() {
               <div className="text-xs font-semibold uppercase tracking-wider text-surface-200/60 mb-1">
                 {issuedToken.service_name}
               </div>
-              <div className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary-400 via-accent-300 to-white tracking-wider my-2">
+              <div className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary-400 via-accent-300 to-white tracking-wider my-2 dir-ltr inline-block">
                 {issuedToken.display_number}
               </div>
               <div className="flex items-center justify-center gap-4 text-xs text-surface-200/80 pt-2 border-t border-white/5 mt-2">

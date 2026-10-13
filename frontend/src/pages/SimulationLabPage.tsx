@@ -23,7 +23,7 @@ import type {
 } from '../types/api'
 
 export function SimulationLabPage() {
-  const { lang, t } = useLanguage()
+  const { lang, t, isRTL } = useLanguage()
 
   // State
   const [scenarios, setScenarios] = useState<ScenarioInfo[]>([])
@@ -182,7 +182,7 @@ export function SimulationLabPage() {
   const selectedScenario = scenarios.find((s) => s.key === selectedScenarioKey)
 
   return (
-    <div className="space-y-8 pb-16">
+    <div className={`space-y-8 pb-16 px-4 sm:px-6 max-w-7xl mx-auto ${isRTL ? 'font-urdu' : ''}`}>
       {/* Page Header */}
       <div className="relative overflow-hidden rounded-3xl border border-slate-700/60 bg-gradient-to-br from-slate-900/90 via-slate-800/80 to-indigo-950/40 p-6 sm:p-8 backdrop-blur-xl shadow-2xl">
         <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-indigo-500/10 blur-3xl" />
@@ -482,8 +482,8 @@ export function SimulationLabPage() {
       {simulationResult && (
         <div className="space-y-6" id="simulation-results-section">
           {/* Navigation Tabs */}
-          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-3">
-            <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-3">
+            <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 w-full sm:w-auto">
               <button
                 onClick={() => setActiveTab('kpis')}
                 id="tab-kpis"

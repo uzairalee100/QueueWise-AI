@@ -1,7 +1,9 @@
 /**
  * QueueWise AI — Multilingual Dictionaries (English & Urdu)
  *
- * Designed for low-literacy clarity and bilingual public service access.
+ * Fully localized bilingual public service access:
+ * - English (en): Clean, modern professional public service terminology.
+ * - Urdu (ur): High-literacy Urdu script without Roman Urdu fallback.
  */
 
 export type Language = 'en' | 'ur'
@@ -15,17 +17,55 @@ export const translations = {
     home: 'Home',
     kiosk: 'Issue Token',
     trackToken: 'Track Token',
+    staffDesk: 'Staff Operations',
+    simulationLab: 'Simulation Lab',
+    analytics: 'Analytics',
+    aiAdvisor: 'AI Advisor',
 
-    // Home actions
-    tokenLo: 'Token Lo',
+    // Navigation Menu
+    menuTitle: 'Navigation Menu',
+    closeMenu: 'Close Menu',
+    activePage: 'Active',
+    toggleLanguage: 'Switch to Urdu',
+
+    // Home actions (Cleaned: Roman Urdu removed completely)
+    tokenLo: 'Get a Digital Token',
     tokenLoSub: 'Get a Digital Token',
     tokenLoDesc: 'Select your service & join the queue in 1 tap',
-    meraToken: 'Mera Token',
+    meraToken: 'Check My Token',
     meraTokenSub: 'Check My Token',
     meraTokenDesc: 'Track live position & estimated wait time',
-    madad: 'Madad',
+    madad: 'How It Works & Help',
     madadSub: 'How It Works & Help',
     madadDesc: 'Simple guidelines for all citizens',
+
+    // Home Portal & Features
+    portalTitle: 'Operations & Management Portal',
+    portalSubtitle: 'Live staff counters, discrete simulation lab, analytics ledger, and AI operational advisor',
+    openDeskAction: 'Open Desk',
+    launchLabAction: 'Launch Lab',
+    viewReportsAction: 'View Reports',
+    consultAdvisorAction: 'Consult Advisor',
+    howItWorks: 'How It Works',
+    feature1Title: '1. Issue Digital Token',
+    feature1Desc: 'Pick your desired service on the touch kiosk to receive a token number & QR code.',
+    feature2Title: '2. Real-Time Tracking',
+    feature2Desc: 'Open the tracker on your mobile to view live position ahead and estimated wait.',
+    feature3Title: '3. Instant Notifications',
+    feature3Desc: 'Get audible and visual alerts when your turn approaches or is called.',
+    feature4Title: '4. Proceed to Counter',
+    feature4Desc: 'When called, proceed to your assigned counter with zero guesswork.',
+    connected: 'Connected',
+    offline: 'Offline',
+    checking: 'Checking...',
+
+    // Help Modal
+    helpStep1Title: '1. How to get a token?',
+    helpStep1Desc: 'Click "Get a Digital Token", choose your required service (e.g. General, Pharmacy), and tap "Print / Issue Digital Token".',
+    helpStep2Title: '2. How to track my position?',
+    helpStep2Desc: 'Scan the QR code on your mobile phone or click "Check My Token" and enter your token number.',
+    helpStep3Title: '3. What should I do when called?',
+    helpStep3Desc: 'When your screen alerts you with sound and turns green, proceed immediately to the counter indicated on your screen.',
 
     // Kiosk Page
     kioskTitle: 'Public Service Token Kiosk',
@@ -36,8 +76,8 @@ export const translations = {
     estimatedWait: 'Estimated Wait',
     stalledWarning: 'Notice: Counters momentarily paused. Estimates based on normal flow.',
     priorityTitle: 'Special Assistance / Priority',
-    priorityStandard: 'Standard / Regular (عام)',
-    prioritySenior: 'Senior Citizen / Differently Abled / Emergency (خصوصی سہولت)',
+    priorityStandard: 'Standard / Regular',
+    prioritySenior: 'Senior Citizen / Differently Abled / Emergency',
     phoneOptional: 'Mobile Number (Optional for SMS / Tracking)',
     phonePlaceholder: 'e.g. 0300 1234567',
     issueTokenBtn: 'Print / Issue Digital Token',
@@ -91,7 +131,6 @@ export const translations = {
     soundAlert: 'Sound Alerts Active',
 
     // Staff & Operations
-    staffDesk: 'Staff Operations',
     staffSubtitle: 'Counter Operator Control Desk',
     displayBoard: 'Display Board',
     selectCounter: 'Select Service Counter',
@@ -118,7 +157,6 @@ export const translations = {
     createCounterBtn: 'Add New Counter',
 
     // Simulation Lab & Optimizer
-    simulationLab: 'Simulation Lab',
     simulationSubtitle: 'Queue Stress-Testing & AI Counter Allocation Optimizer',
     runSimulationBtn: 'Run Simulation',
     runningSimulation: 'Simulating Discrete Queue Events...',
@@ -141,12 +179,12 @@ export const translations = {
     priorityRatioLabel: 'Priority Influx Ratio (%)',
     noShowRateLabel: 'No-Show Rate (%)',
     serviceDurationMultLabel: 'Service Duration Multiplier',
+    randomSeedLabel: 'Random Seed',
     tokenThroughput: 'Throughput',
     unservedTokens: 'Unserved at Cutoff',
     optimizationImpact: 'Optimization Impact',
 
     // Operational Analytics
-    analytics: 'Analytics',
     analyticsSubtitle: 'Live Supervisor Telemetry & Real-Event Operational Metrics',
     timeRange: 'Time Range',
     today: 'Today (24h)',
@@ -162,7 +200,6 @@ export const translations = {
     liveRefresh: 'Live Auto-Refresh (5s)',
 
     // AI Operations Agent & Advisor
-    aiAdvisor: 'AI Advisor',
     aiAdvisorSubtitle: 'Grounded Operational Intelligence & Real-Time Decision Support',
     askAgentPrompt: 'Ask the AI Operations Advisor anything about live queues, bottlenecks, or counters...',
     suggestedQueries: 'Recommended Inquiries',
@@ -178,8 +215,6 @@ export const translations = {
     executionMode: 'Execution Mode',
     ruleBasedGrounded: 'Rule-Based Engine (Zero Hallucination)',
     clearChat: 'Clear Conversation',
-    speakResponse: 'Read Aloud',
-    stopSpeaking: 'Stop Audio',
     evidenceSource: 'Data Source',
     timestampLabel: 'Timestamp',
     jumpToCounters: 'Open Staff Counters',
@@ -195,17 +230,55 @@ export const translations = {
     home: 'ہوم',
     kiosk: 'ٹوکن حاصل کریں',
     trackToken: 'ٹوکن چیک کریں',
+    staffDesk: 'عملہ ڈیسک',
+    simulationLab: 'سمولیشن لیب',
+    analytics: 'تجزیات و رپورٹ',
+    aiAdvisor: 'اے آئی مشیر',
 
-    // Home actions
-    tokenLo: 'ٹوکن حاصل کریں',
-    tokenLoSub: 'نیا ٹوکن لیں',
-    tokenLoDesc: 'ایک کلک میں اپنی خدمت منتخب کریں اور قطار میں شامل ہوں',
-    meraToken: 'میرا ٹوکن',
-    meraTokenSub: 'اپنا ٹوکن دیکھیں',
-    meraTokenDesc: 'قطار میں اپنی موجودہ پوزیشن اور انتظار کا وقت دیکھیں',
-    madad: 'مدد و رہنمائی',
+    // Navigation Menu
+    menuTitle: 'نیویگیشن مینو',
+    closeMenu: 'مینو بند کریں',
+    activePage: 'موجودہ صفحہ',
+    toggleLanguage: 'انگریزی میں تبدیل کریں',
+
+    // Home actions (Proper Urdu script only - No Roman Urdu)
+    tokenLo: 'ڈیجیٹل ٹوکن حاصل کریں',
+    tokenLoSub: 'ڈیجیٹل ٹوکن حاصل کریں',
+    tokenLoDesc: 'اپنی مطلوبہ سروس منتخب کریں اور ایک کلک میں قطار میں شامل ہوں',
+    meraToken: 'اپنا ٹوکن چیک کریں',
+    meraTokenSub: 'اپنا ٹوکن چیک کریں',
+    meraTokenDesc: 'قطار میں اپنی موجودہ پوزیشن اور متوقع انتظار کا وقت دیکھیں',
+    madad: 'طریقہ کار اور مدد',
     madadSub: 'طریقہ کار اور مدد',
-    madadDesc: 'شہریوں کی آسانی کے لیے آسان ہدایات',
+    madadDesc: 'تمام شہریوں کے لیے آسان اور واضح ہدایات',
+
+    // Home Portal & Features
+    portalTitle: 'آپریشنز اور انتظامی پورٹل',
+    portalSubtitle: 'لائیو کاؤنٹرز، سمولیشن لیب، آپریشنل تجزیات اور اے آئی آپریشنز مشیر',
+    openDeskAction: 'ڈیسک کھولیں',
+    launchLabAction: 'لیب شروع کریں',
+    viewReportsAction: 'رپورٹ دیکھیں',
+    consultAdvisorAction: 'مشورہ حاصل کریں',
+    howItWorks: 'طریقہ کار',
+    feature1Title: '1. ڈیجیٹل ٹوکن لیں',
+    feature1Desc: 'کیوسک پر اپنی مطلوبہ خدمت منتخب کر کے ٹوکن نمبر اور QR کوڈ حاصل کریں۔',
+    feature2Title: '2. لائیو ٹریکنگ',
+    feature2Desc: 'موبائل پر ٹریکر کھول کر قطار میں اپنی پوزیشن اور انتظار کا وقت دیکھیں۔',
+    feature3Title: '3. فوری اطلاعات',
+    feature3Desc: 'باری قریب آنے یا پکارے جانے پر الرٹ اور صوتی پیغام موصول کریں۔',
+    feature4Title: '4. کاؤنٹر پر تشریف لے جائیں',
+    feature4Desc: 'پکارے جانے پر بغیر کسی پریشانی کے اپنے مخصوص کاؤنٹر پر تشریف لے جائیں۔',
+    connected: 'فعال',
+    offline: 'منقطع',
+    checking: 'جانچ جاری ہے...',
+
+    // Help Modal
+    helpStep1Title: '1. ٹوکن کیسے حاصل کریں؟',
+    helpStep1Desc: '"ڈیجیٹل ٹوکن حاصل کریں" پر کلک کریں، مطلوبہ خدمت منتخب کریں، اور "ٹوکن حاصل کریں" دبائیں۔',
+    helpStep2Title: '2. اپنی باری کیسے چیک کریں؟',
+    helpStep2Desc: 'موبائل سے QR کوڈ اسکین کریں یا "اپنا ٹوکن چیک کریں" پر کلک کر کے ٹوکن نمبر درج کریں۔',
+    helpStep3Title: '3. باری آنے پر کیا کریں؟',
+    helpStep3Desc: 'جب اسکرین پر اطلاع موصول ہو اور گھنٹی بجے، فوری طور پر بتائے گئے کاؤنٹر پر تشریف لے جائیں۔',
 
     // Kiosk Page
     kioskTitle: 'ڈیجیٹل ٹوکن کیوسک',
@@ -216,8 +289,8 @@ export const translations = {
     estimatedWait: 'متوقع انتظار',
     stalledWarning: 'اطلاع: کاؤنٹرز وقتی طور پر موقوف ہیں۔ سروس جلد بحال ہو جائے گی۔',
     priorityTitle: 'خصوصی ترجیح / سہولت',
-    priorityStandard: 'عام شہری (Standard)',
-    prioritySenior: 'معمر شہری / خصوصی افراد / فوری (Priority)',
+    priorityStandard: 'عام شہری / باقاعدہ',
+    prioritySenior: 'معمر شہری / خصوصی افراد / ہنگامی',
     phoneOptional: 'موبائل نمبر (اختیاری)',
     phonePlaceholder: 'مثلاً: 03001234567',
     issueTokenBtn: 'ٹوکن حاصل کریں',
@@ -271,7 +344,6 @@ export const translations = {
     soundAlert: 'صوتی الرٹس فعال ہیں',
 
     // Staff & Operations
-    staffDesk: 'عملہ ڈیسک',
     staffSubtitle: 'کاؤنٹر آپریٹر کنٹرول ڈیسک',
     displayBoard: 'ڈسپلے بورڈ',
     selectCounter: 'سروس کاؤنٹر منتخب کریں',
@@ -289,7 +361,7 @@ export const translations = {
     waitingQueueHeader: 'اس کاؤنٹر کے لیے منتظر قطار',
     noWaitingTokens: 'فی الوقت قطار میں کوئی منتظر شہری نہیں ہے۔',
     openCounterAction: 'کاؤنٹر کھولیں',
-    pauseCounterAction: 'وقفہ لیں (Pause)',
+    pauseCounterAction: 'وقفہ لیں',
     resumeCounterAction: 'کام دوبارہ شروع کریں',
     closeCounterAction: 'کاؤنٹر بند کریں',
     counterSettings: 'خدمات کی ترتیبات',
@@ -298,7 +370,6 @@ export const translations = {
     createCounterBtn: 'نیا کاؤنٹر بنائیں',
 
     // Simulation Lab & Optimizer
-    simulationLab: 'سمولیشن لیب',
     simulationSubtitle: 'قطار کے منظرناموں کی جانچ اور کاؤنٹر آپٹیمائزر',
     runSimulationBtn: 'سمولیشن چلائیں',
     runningSimulation: 'قطار کے واقعات کی سمولیشن جاری ہے...',
@@ -321,13 +392,12 @@ export const translations = {
     priorityRatioLabel: 'خصوصی ترجیح کا تناسب (%)',
     noShowRateLabel: 'غیر حاضری کا تناسب (%)',
     serviceDurationMultLabel: 'سروس کے دورانیے کا ضارب',
-    randomSeedLabel: 'مخصوص سیڈ (Seed)',
+    randomSeedLabel: 'مخصوص سیڈ',
     tokenThroughput: 'سروس کی شرح (فی گھنٹہ)',
     unservedTokens: 'باقی رہ جانے والے ٹوکنز',
     optimizationImpact: 'آپٹیمائزیشن کے اثرات',
 
     // Operational Analytics
-    analytics: 'تجزیات و رپورٹ',
     analyticsSubtitle: 'نگران ڈیش بورڈ اور اصل واقعات کے لائیو اعداد و شمار',
     timeRange: 'وقت کا انتخاب',
     today: 'آج (24 گھنٹے)',
@@ -343,7 +413,6 @@ export const translations = {
     liveRefresh: 'خودکار تجدید (5 سیکنڈ)',
 
     // AI Operations Agent & Advisor
-    aiAdvisor: 'اے آئی مشیر',
     aiAdvisorSubtitle: 'لائیو قطار کے حالات کا تجزیہ اور حقیقی مشورے',
     askAgentPrompt: 'قطار کی صورتحال، رکاوٹوں یا کاؤنٹرز کے بارے میں پوچھیں...',
     suggestedQueries: 'تجویز کردہ سوالات',
@@ -359,8 +428,6 @@ export const translations = {
     executionMode: 'انجن موڈ',
     ruleBasedGrounded: 'مصدقہ حسابی تجزیہ (سو فیصد درست)',
     clearChat: 'گفتگو صاف کریں',
-    speakResponse: 'آواز میں سنیں',
-    stopSpeaking: 'آواز بند کریں',
     evidenceSource: 'ڈیٹا کا ماخذ',
     timestampLabel: 'وقت',
     jumpToCounters: 'کاؤنٹرز کھولیں',

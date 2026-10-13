@@ -82,7 +82,7 @@ function TokenStatusBadge({ status }: { status: string }) {
 /* ─── Main Component ───────────────────────────────────────────── */
 
 export function StaffDashboardPage() {
-  const { t } = useLanguage()
+  const { t, isRTL } = useLanguage()
 
   // Data state
   const [counters, setCounters] = useState<Counter[]>([])
@@ -429,7 +429,7 @@ export function StaffDashboardPage() {
    *  RENDER
    * ═══════════════════════════════════════════════════════════ */
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 animate-fade-in" id="staff-dashboard">
+    <div className={`max-w-7xl mx-auto px-4 sm:px-6 py-6 animate-fade-in ${isRTL ? 'font-urdu' : ''}`} id="staff-dashboard">
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-2xl sm:text-3xl font-black gradient-text" id="staff-title">
@@ -522,19 +522,19 @@ export function StaffDashboardPage() {
           </div>
 
           {/* Create New Counter */}
-          <div className="mb-4 flex gap-2">
+          <div className="mb-4 flex flex-col sm:flex-row gap-2">
             <input
               type="text"
               value={newCounterName}
               onChange={(e) => setNewCounterName(e.target.value)}
               placeholder={t.newCounterName}
-              className="flex-1 px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-surface-100 placeholder:text-surface-200/30 focus:border-primary-400/40 focus:outline-none"
+              className="flex-1 px-3 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm text-surface-100 placeholder:text-surface-200/30 focus:border-primary-400/40 focus:outline-none min-h-[44px]"
               id="new-counter-input"
             />
             <button
               onClick={handleCreateCounter}
               disabled={creatingCounter || !newCounterName.trim()}
-              className="btn-primary text-xs px-4 disabled:opacity-40"
+              className="btn-primary text-xs px-4 py-2.5 disabled:opacity-40 min-h-[44px]"
               id="create-counter-submit"
             >
               {creatingCounter ? '...' : t.createCounterBtn}
@@ -650,10 +650,10 @@ export function StaffDashboardPage() {
                   {/* Token Display */}
                   <div className="flex items-center justify-between mb-4">
                     <div>
-                      <div className="text-3xl sm:text-4xl font-black gradient-text tracking-tight">
+                      <div className="text-3xl sm:text-4xl font-black gradient-text tracking-tight dir-ltr inline-block">
                         {activeToken.display_number}
                       </div>
-                      <div className="text-xs text-surface-200/50 mt-0.5 font-mono">
+                      <div className="text-xs text-surface-200/50 mt-0.5 font-mono dir-ltr">
                         ID: {activeToken.public_id}
                       </div>
                     </div>

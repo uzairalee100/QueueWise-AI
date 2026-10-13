@@ -210,7 +210,7 @@ export function TrackTokenPage() {
                 {isConnected ? 'Live WebSocket Active' : 'Connecting to Stream...'}
               </span>
             </div>
-            <span className="text-surface-200/40 text-[11px] font-mono">
+            <span className="text-surface-200/40 text-[11px] font-mono dir-ltr">
               ID: {token.public_id.substring(0, 8)}...
             </span>
           </div>
@@ -289,7 +289,7 @@ export function TrackTokenPage() {
 
             {/* Giant Token Number */}
             <div className="my-6">
-              <div className="text-5xl sm:text-6xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-white via-primary-200 to-accent-300">
+              <div className="text-5xl sm:text-6xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-white via-primary-200 to-accent-300 dir-ltr inline-block">
                 {token.display_number}
               </div>
             </div>

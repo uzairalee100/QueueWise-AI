@@ -87,31 +87,3 @@ export function playApproachingAlert(): void {
   }
 }
 
-/**
- * Read text aloud using browser Web Speech API (Text-to-Speech).
- * Works offline in all modern browsers without cloud credentials.
- */
-export function speakText(text: string, lang: 'en' | 'ur' | 'roman_ur' = 'en'): void {
-  try {
-    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return
-    window.speechSynthesis.cancel()
-    const utterance = new SpeechSynthesisUtterance(text)
-    utterance.lang = lang === 'ur' ? 'ur-PK' : 'en-US'
-    utterance.rate = 1.0
-    window.speechSynthesis.speak(utterance)
-  } catch (err) {
-    console.warn('Speech synthesis playback blocked:', err)
-  }
-}
-
-/** Stop any currently playing speech. */
-export function stopSpeech(): void {
-  try {
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      window.speechSynthesis.cancel()
-    }
-  } catch (err) {
-    console.warn('Error stopping speech:', err)
-  }
-}
-

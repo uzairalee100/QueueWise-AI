@@ -69,6 +69,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -76,8 +77,26 @@ body {
   background: var(--color-surface-950);
   color: var(--color-surface-100);
   min-height: 100vh;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== Bilingual Urdu Typography & RTL ===== */
+[dir="rtl"] {
+  font-family: 'Noto Sans Arabic', 'Urdu Typesetting', 'Segoe UI', Tahoma, Arial, sans-serif;
+  text-align: right;
+}
+
+.font-urdu {
+  font-family: 'Noto Sans Arabic', 'Urdu Typesetting', 'Segoe UI', Tahoma, Arial, sans-serif;
+}
+
+/* Force LTR for numbers, codes, and identifiers */
+.dir-ltr {
+  direction: ltr !important;
+  unicode-bidi: isolate;
+  text-align: left;
 }
 
 /* ===== Utility classes for glassmorphism ===== */
