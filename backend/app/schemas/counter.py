@@ -25,11 +25,16 @@ class CounterAssignOperator(BaseModel):
     operator_id: Optional[uuid.UUID] = None
 
 
+class CounterAssignServices(BaseModel):
+    supported_service_ids: List[uuid.UUID]
+
+
 class CounterResponse(CounterBase):
     id: uuid.UUID
     status: CounterStatus
     assigned_operator_id: Optional[uuid.UUID] = None
     current_token_id: Optional[uuid.UUID] = None
+    current_token_display_number: Optional[str] = None
     status_changed_at: datetime
     created_at: datetime
     supported_services: List[ServiceCategoryResponse] = []

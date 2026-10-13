@@ -203,24 +203,100 @@ PATCH /api/v1/counters/{counter_id}/status
 ```
 Updates operational status (`OPEN_IDLE`, `PAUSED`, `CLOSED`). Cannot pause/close while actively serving.
 
+#### Quick Counter Controls
+```http
+POST /api/v1/counters/{counter_id}/open
+POST /api/v1/counters/{counter_id}/pause
+POST /api/v1/counters/{counter_id}/resume
+POST /api/v1/counters/{counter_id}/close
+```
+Dedicated operator action endpoints for opening, pausing, resuming, and closing counters.
+
+#### Assign Operator & Services
+```http
+PATCH /api/v1/counters/{counter_id}/operator
+PUT /api/v1/counters/{counter_id}/services
+```
+Assign staff operator or configure which service categories a counter serves.
+
+---
+
+### Queues (Metrics & Wait Time Estimation)
+
+#### System Queue Summary
+```http
+GET /api/v1/queues/summary?session_id=default
+```
+Returns system-wide operational summary for all active service categories.
+Includes live queue depths, active vs total counters, average service duration,
+estimated wait time for prospective arrivals, and stalled queue detection.
+
+**Response:**
+```json
+{
+  "session_id": "default",
+  "timestamp": "2026-10-13T10:00:00Z",
+  "total_waiting": 3,
+  "total_serving": 1,
+  "total_active_counters": 2,
+  "services": [
+    {
+      "service_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "service_name": "General Inquiries & Token Issuance",
+      "service_code": "GEN",
+      "waiting_count": 3,
+      "serving_count": 1,
+      "completed_count": 12,
+      "skipped_count": 1,
+      "cancelled_count": 0,
+      "active_counters": 2,
+      "total_counters": 3,
+      "avg_service_duration_seconds": 180,
+      "estimated_wait_for_next_arrival": 360,
+      "is_stalled": false,
+      "queue_status": "NORMAL",
+      "next_token_display_number": "GEN-014",
+      "currently_serving": [
+        {
+          "counter_id": "...",
+          "counter_name": "Counter 1",
+          "token_id": "...",
+          "token_display_number": "GEN-013",
+          "service_started_at": "2026-10-13T09:58:00Z",
+          "duration_seconds": 120
+        }
+      ]
+    }
+  ]
+}
+```
+
+#### Prospective Arrival Wait Estimate
+```http
+GET /api/v1/queues/{service_id}/estimate?session_id=default&priority=0
+```
+Calculates arrival wait estimate for a citizen considering joining this queue.
+
+#### Service Waiting Tokens
+```http
+GET /api/v1/queues/{service_id}/waiting?session_id=default
+```
+Returns ordered list of waiting tokens with dynamic wait estimates.
+
 ---
 
 ## Upcoming Endpoints
 
-### Milestone 3 (Wait Estimator & Live Counters)
-- Dynamic wait-time recalculation on queue changes
-- Queue summary metrics endpoint: `GET /api/v1/queues/summary`
-
-### Milestone 5 (WebSockets & Real-Time)
-- `WS /ws/live` - Real-time queue event push
-
-### Milestone 6 (Analytics)
-- `GET /api/v1/analytics/summary`
-- `GET /api/v1/analytics/queues`
+### Milestone 4 (WebSockets & Real-Time)
+- `WS /ws/live` - Real-time queue event push and notification triggers
 
 ### Milestone 7 (Simulation Lab)
 - `POST /api/v1/simulation/runs`
 - `POST /api/v1/simulation/runs/{id}/start`
 
-### Milestone 8 (AI Operations Agent)
+### Milestone 8 (Operational Analytics)
+- `GET /api/v1/analytics/summary`
+- `GET /api/v1/analytics/queues`
+
+### Milestone 10 (AI Operations Agent)
 - `POST /api/v1/agent/ask`

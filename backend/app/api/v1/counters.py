@@ -16,7 +16,14 @@ from app.models.counter import Counter
 from app.models.service_category import ServiceCategory
 from app.models.enums import CounterStatus, ServiceEventType
 from app.models.service_event import ServiceEvent
-from app.schemas.counter import CounterCreate, CounterResponse, CounterStatusUpdate
+from app.models.audit_log import AuditLog
+from app.schemas.counter import (
+    CounterCreate,
+    CounterResponse,
+    CounterStatusUpdate,
+    CounterAssignOperator,
+    CounterAssignServices,
+)
 from app.schemas.token import TokenResponse
 from app.services.queue_engine import (
     QueueEngine,
@@ -36,12 +43,31 @@ async def list_counters(
     """List all counters with their supported services and current status."""
     stmt = (
         select(Counter)
-        .options(selectinload(Counter.supported_services))
+        .options(selectinload(Counter.supported_services), selectinload(Counter.current_token))
         .order_by(Counter.name.asc())
     )
     result = await db.execute(stmt)
     counters = result.scalars().all()
     return list(counters)
+
+
+@router.get("/{counter_id}", response_model=CounterResponse)
+async def get_counter(
+    counter_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+):
+    """Get single counter details."""
+    counter = await db.get(
+        Counter,
+        counter_id,
+        options=[selectinload(Counter.supported_services), selectinload(Counter.current_token)],
+    )
+    if not counter:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Counter '{counter_id}' not found.",
+        )
+    return counter
 
 
 @router.post("", response_model=CounterResponse, status_code=status.HTTP_201_CREATED)
@@ -73,7 +99,9 @@ async def update_counter_status(
 ):
     """Update counter status (e.g. OPEN_IDLE, PAUSED, CLOSED)."""
     counter = await db.get(
-        Counter, counter_id, options=[selectinload(Counter.supported_services)]
+        Counter,
+        counter_id,
+        options=[selectinload(Counter.supported_services), selectinload(Counter.current_token)],
     )
     if not counter:
         raise HTTPException(
@@ -100,9 +128,121 @@ async def update_counter_status(
         timestamp=now,
         reason=f"Status changed from {old_status.value} to {payload.status.value}",
     )
-    # Note: ServiceEvent token_id is non-nullable in schema if strictly token-bound,
-    # so we log to audit or skip event if token_id is required. Since ServiceEvent has
-    # token_id nullable=False, let's only log if we have a token or handle accordingly.
+    db.add(event)
+
+    audit = AuditLog(
+        action="UPDATE_COUNTER_STATUS",
+        target_entity="Counter",
+        target_id=str(counter.id),
+        outcome="SUCCESS",
+        metadata_json={"old_status": old_status.value, "new_status": payload.status.value},
+    )
+    db.add(audit)
+
+    await db.commit()
+    await db.refresh(counter)
+    return counter
+
+
+@router.post("/{counter_id}/open", response_model=CounterResponse)
+async def open_counter(
+    counter_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+):
+    """Operator action: Open counter for service."""
+    status_to_set = CounterStatus.OPEN_IDLE
+    counter = await db.get(
+        Counter,
+        counter_id,
+        options=[selectinload(Counter.supported_services), selectinload(Counter.current_token)],
+    )
+    if not counter:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Counter not found")
+    if counter.current_token_id:
+        status_to_set = CounterStatus.OPEN_SERVING
+
+    return await update_counter_status(counter_id, CounterStatusUpdate(status=status_to_set), db)
+
+
+@router.post("/{counter_id}/pause", response_model=CounterResponse)
+async def pause_counter(
+    counter_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+):
+    """Operator action: Temporarily pause counter (e.g. break)."""
+    return await update_counter_status(counter_id, CounterStatusUpdate(status=CounterStatus.PAUSED), db)
+
+
+@router.post("/{counter_id}/resume", response_model=CounterResponse)
+async def resume_counter(
+    counter_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+):
+    """Operator action: Resume counter from pause."""
+    return await update_counter_status(counter_id, CounterStatusUpdate(status=CounterStatus.OPEN_IDLE), db)
+
+
+@router.post("/{counter_id}/close", response_model=CounterResponse)
+async def close_counter(
+    counter_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+):
+    """Operator action: Close counter for end of shift or maintenance."""
+    return await update_counter_status(counter_id, CounterStatusUpdate(status=CounterStatus.CLOSED), db)
+
+
+@router.patch("/{counter_id}/operator", response_model=CounterResponse)
+async def assign_operator(
+    counter_id: uuid.UUID,
+    payload: CounterAssignOperator,
+    db: AsyncSession = Depends(get_db),
+):
+    """Assign or unassign a staff operator to this counter."""
+    counter = await db.get(
+        Counter,
+        counter_id,
+        options=[selectinload(Counter.supported_services), selectinload(Counter.current_token)],
+    )
+    if not counter:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Counter not found")
+
+    counter.assigned_operator_id = payload.operator_id
+    now = datetime.now(timezone.utc)
+
+    event = ServiceEvent(
+        token_id=None,
+        counter_id=counter.id,
+        event_type=ServiceEventType.OPERATOR_ASSIGNED,
+        timestamp=now,
+        reason=f"Operator {'assigned: ' + str(payload.operator_id) if payload.operator_id else 'unassigned'}",
+    )
+    db.add(event)
+
+    await db.commit()
+    await db.refresh(counter)
+    return counter
+
+
+@router.put("/{counter_id}/services", response_model=CounterResponse)
+async def update_counter_services(
+    counter_id: uuid.UUID,
+    payload: CounterAssignServices,
+    db: AsyncSession = Depends(get_db),
+):
+    """Configure which service categories this counter serves."""
+    counter = await db.get(
+        Counter,
+        counter_id,
+        options=[selectinload(Counter.supported_services), selectinload(Counter.current_token)],
+    )
+    if not counter:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Counter not found")
+
+    services_stmt = select(ServiceCategory).where(
+        ServiceCategory.id.in_(payload.supported_service_ids)
+    )
+    services_res = await db.execute(services_stmt)
+    counter.supported_services = list(services_res.scalars().all())
 
     await db.commit()
     await db.refresh(counter)

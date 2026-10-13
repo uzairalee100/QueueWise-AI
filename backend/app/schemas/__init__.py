@@ -15,12 +15,19 @@ from app.schemas.counter import (
     CounterResponse,
     CounterStatusUpdate,
     CounterAssignOperator,
+    CounterAssignServices,
 )
 from app.schemas.token import (
     TokenCreate,
     TokenResponse,
     TokenPublicStatus,
     TokenTransitionRequest,
+)
+from app.schemas.queue import (
+    ServingTokenInfo,
+    QueueSummaryItem,
+    QueueSummaryResponse,
+    WaitEstimateDetail,
 )
 
 __all__ = [
@@ -35,8 +42,13 @@ __all__ = [
     "CounterResponse",
     "CounterStatusUpdate",
     "CounterAssignOperator",
+    "CounterAssignServices",
     "TokenCreate",
     "TokenResponse",
     "TokenPublicStatus",
     "TokenTransitionRequest",
+    "ServingTokenInfo",
+    "QueueSummaryItem",
+    "QueueSummaryResponse",
+    "WaitEstimateDetail",
 ]

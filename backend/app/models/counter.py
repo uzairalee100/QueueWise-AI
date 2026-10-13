@@ -88,3 +88,7 @@ class Counter(Base):
         lazy="joined",
     )
     service_events = relationship("ServiceEvent", back_populates="counter")
+
+    @property
+    def current_token_display_number(self) -> Optional[str]:
+        return self.current_token.display_number if self.current_token else None

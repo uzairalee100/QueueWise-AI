@@ -9,6 +9,8 @@ import type {
   TokenPublicStatus,
   TokenCreateRequest,
   Counter,
+  QueueSummaryResponse,
+  WaitEstimateDetail,
 } from '../types/api'
 
 const API_BASE = '/api/v1'
@@ -49,6 +51,26 @@ export async function apiPost<T>(path: string, body?: unknown): Promise<T> {
   return handleResponse<T>(response)
 }
 
+/** PATCH request to the API */
+export async function apiPatch<T>(path: string, body?: unknown): Promise<T> {
+  const response = await fetch(`${API_BASE}${path}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: body ? JSON.stringify(body) : undefined,
+  })
+  return handleResponse<T>(response)
+}
+
+/** PUT request to the API */
+export async function apiPut<T>(path: string, body?: unknown): Promise<T> {
+  const response = await fetch(`${API_BASE}${path}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: body ? JSON.stringify(body) : undefined,
+  })
+  return handleResponse<T>(response)
+}
+
 /** Health check — uses root endpoint, not /api/v1 */
 export async function checkHealth() {
   const response = await fetch('/health')
@@ -79,4 +101,56 @@ export async function cancelToken(publicId: string, reason?: string): Promise<To
 /** List counters */
 export async function getCounters(): Promise<Counter[]> {
   return apiGet<Counter[]>('/counters')
+}
+
+/** Counter operator controls */
+export async function openCounter(counterId: string): Promise<Counter> {
+  return apiPost<Counter>(`/counters/${counterId}/open`)
+}
+
+export async function pauseCounter(counterId: string): Promise<Counter> {
+  return apiPost<Counter>(`/counters/${counterId}/pause`)
+}
+
+export async function resumeCounter(counterId: string): Promise<Counter> {
+  return apiPost<Counter>(`/counters/${counterId}/resume`)
+}
+
+export async function closeCounter(counterId: string): Promise<Counter> {
+  return apiPost<Counter>(`/counters/${counterId}/close`)
+}
+
+export async function callNextToken(counterId: string, sessionId: string = 'default') {
+  return apiPost(`/counters/${counterId}/call-next?session_id=${encodeURIComponent(sessionId)}`)
+}
+
+export async function startServingToken(counterId: string) {
+  return apiPost(`/counters/${counterId}/serve`)
+}
+
+export async function completeServingToken(counterId: string) {
+  return apiPost(`/counters/${counterId}/complete`)
+}
+
+export async function skipToken(counterId: string, reason: string = 'No-show') {
+  return apiPost(`/counters/${counterId}/skip?reason=${encodeURIComponent(reason)}`)
+}
+
+export async function recallToken(counterId: string, reason: string = 'Requeued') {
+  return apiPost(`/counters/${counterId}/recall?reason=${encodeURIComponent(reason)}`)
+}
+
+/** Queue summary and wait estimates */
+export async function getQueueSummary(sessionId: string = 'default'): Promise<QueueSummaryResponse> {
+  return apiGet<QueueSummaryResponse>(`/queues/summary?session_id=${encodeURIComponent(sessionId)}`)
+}
+
+export async function getProspectiveWaitEstimate(
+  serviceId: string,
+  priority: number = 0,
+  sessionId: string = 'default',
+): Promise<WaitEstimateDetail> {
+  return apiGet<WaitEstimateDetail>(
+    `/queues/${serviceId}/estimate?priority=${priority}&session_id=${encodeURIComponent(sessionId)}`,
+  )
 }

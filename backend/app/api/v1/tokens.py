@@ -14,6 +14,7 @@ from app.services.queue_engine import (
     ServiceCategoryNotFoundError,
     InvalidStateTransitionError,
 )
+from app.services.wait_estimator import WaitEstimator
 from app.models.enums import TokenStatus
 
 router = APIRouter()
@@ -39,11 +40,7 @@ async def create_token(
             priority=payload.priority,
         )
 
-        position, ahead_count = await QueueEngine.get_queue_position_and_ahead(db, token)
-        duration_per_token = (
-            token.service_category.default_duration_seconds if token.service_category else 300
-        )
-        estimated_wait = (ahead_count + 1) * duration_per_token if token.status == TokenStatus.WAITING else 0
+        estimate = await WaitEstimator.estimate_token_wait(db, token)
 
         return TokenPublicStatus(
             public_id=token.public_id,
@@ -51,8 +48,10 @@ async def create_token(
             status=token.status,
             service_name=token.service_category.name if token.service_category else "General",
             service_code=token.service_category.code if token.service_category else "GEN",
-            position_ahead=ahead_count,
-            estimated_wait_seconds=estimated_wait,
+            position_ahead=estimate["position_ahead"],
+            estimated_wait_seconds=estimate["estimated_wait_seconds"],
+            active_counters=estimate["active_counters"],
+            is_stalled=estimate["is_stalled"],
             called_counter_name=token.called_counter.name if token.called_counter else None,
             created_at=token.created_at,
             called_at=token.called_at,
@@ -78,11 +77,7 @@ async def get_token_status(
     """
     try:
         token = await QueueEngine.get_token_by_public_id(db, public_id)
-        position, ahead_count = await QueueEngine.get_queue_position_and_ahead(db, token)
-        duration_per_token = (
-            token.service_category.default_duration_seconds if token.service_category else 300
-        )
-        estimated_wait = (ahead_count + 1) * duration_per_token if token.status == TokenStatus.WAITING else 0
+        estimate = await WaitEstimator.estimate_token_wait(db, token)
 
         return TokenPublicStatus(
             public_id=token.public_id,
@@ -90,8 +85,10 @@ async def get_token_status(
             status=token.status,
             service_name=token.service_category.name if token.service_category else "General",
             service_code=token.service_category.code if token.service_category else "GEN",
-            position_ahead=ahead_count,
-            estimated_wait_seconds=estimated_wait,
+            position_ahead=estimate["position_ahead"],
+            estimated_wait_seconds=estimate["estimated_wait_seconds"],
+            active_counters=estimate["active_counters"],
+            is_stalled=estimate["is_stalled"],
             called_counter_name=token.called_counter.name if token.called_counter else None,
             created_at=token.created_at,
             called_at=token.called_at,

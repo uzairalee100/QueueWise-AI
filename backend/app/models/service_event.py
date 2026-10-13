@@ -25,11 +25,11 @@ class ServiceEvent(Base):
     id: Mapped[uuid.UUID] = mapped_column(
         Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
-    token_id: Mapped[uuid.UUID] = mapped_column(
+    token_id: Mapped[Optional[uuid.UUID]] = mapped_column(
         Uuid(as_uuid=True),
         ForeignKey("tokens.id", ondelete="CASCADE"),
         index=True,
-        nullable=False,
+        nullable=True,
     )
     counter_id: Mapped[Optional[uuid.UUID]] = mapped_column(
         Uuid(as_uuid=True),

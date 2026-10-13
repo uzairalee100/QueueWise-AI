@@ -58,6 +58,8 @@ class TokenPublicStatus(BaseModel):
     service_code: str
     position_ahead: int = 0
     estimated_wait_seconds: int = 0
+    active_counters: int = 1
+    is_stalled: bool = False
     called_counter_name: Optional[str] = None
     created_at: datetime
     called_at: Optional[datetime] = None

@@ -11,8 +11,11 @@ from app.services.queue_engine import (
     InvalidStateTransitionError,
 )
 
+from app.services.wait_estimator import WaitEstimator
+
 __all__ = [
     "QueueEngine",
+    "WaitEstimator",
     "QueueEngineError",
     "TokenNotFoundError",
     "ServiceCategoryNotFoundError",
